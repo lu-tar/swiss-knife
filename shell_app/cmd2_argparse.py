@@ -6,12 +6,13 @@ from datetime import datetime
 from rich.console import Console
 from rich.table import Table
 from rich import print
+from tcp_latency import measure_latency
 
 # Globals chilling on top of the code
 IP_REGEX = "\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3}"
 BANNER = True
 #INTERNET_IP = str(requests.get("https://api.ipify.org?format=text").text)
-INTERNET_IP = "Do not disturb API during tests"
+INTERNET_IP = "Do not disturb API"
 OPERATING_SYSTEM = platform.system()
 RICH_CONSOLE = Console()
 CURRENT_TIME = datetime.now()
@@ -73,9 +74,40 @@ interfaces_table()
 class FirstApp(cmd2.Cmd):
    prompt = "# "
    intro = "Welcome! This is an intro " + CLOCK_TIME + "\n"
-   # Show ip interfaces table
+
+   # Show interfaces: default is eth
+   # 
+   ip_parser = cmd2.Cmd2ArgumentParser()
+   ip_parser.add_argument('-w', '--wifi', default=False, action='store_true', help='show wireless interface ip')
+   ip_parser.add_argument('-v', '--verbose', default=False, action='store_true', help='show interfaces table')
+   ip_parser.add_argument('-usb', '--usb', default=False, action='store_true', help='show usb-c interface ip')
+   @cmd2.with_argparser(ip_parser)
    def do_ip(self, args):
-      interfaces_table()
+      if args.verbose:
+         interfaces_table()
+      elif args.wifi:
+         netsh_wifi_if = subprocess.Popen(["netsh","interface","ip","show", "config", "Wi-Fi"], stdout=subprocess.PIPE, shell=True)
+         wifi_output = netsh_wifi_if.communicate()[0]
+         wifi_info = re.findall(IP_REGEX, str(wifi_output)) # Array of IP
+         if len(wifi_info) == 5:
+            for i in ethernet_info: print(i, end=" ")
+            print("\n")
+      elif args.usb:
+         netsh_eth_usb_if = subprocess.Popen(["netsh","interface","ip","show", "config", "Ethernet 7"], stdout=subprocess.PIPE, shell=True)
+         eth_usb_output = netsh_eth_usb_if.communicate()[0]
+         eth_usb_info = re.findall(IP_REGEX, str(eth_usb_output)) # Array of IP
+         if len(eth_usb_info) == 5:
+            for i in eth_usb_info: print(i, end=" ")
+            print("\n")
+      else:
+         netsh_ethernet_if = subprocess.Popen(["netsh","interface","ip","show", "config", "Ethernet"], stdout=subprocess.PIPE, shell=True)
+         ethernet_output = netsh_ethernet_if.communicate()[0]
+         ethernet_info = re.findall(IP_REGEX, str(ethernet_output)) # Array of IP
+         if len(ethernet_info) == 5:
+            for i in ethernet_info: print(i, end=" ")
+            print("\n")
+
+
    # Show wifi statistics from netsh
    def do_wifistat(self):
       CURRENT_TIME = datetime.now()
@@ -160,6 +192,10 @@ class FirstApp(cmd2.Cmd):
             #with open ("ping_conf", "w") as file:
             #   file.write(args.address + "\n" + args.repeat)
             subprocess.Popen('x-terminal-emulator -e "bash -c \\"ping 1.1.1.1; exec bash\\""', shell=True)
+   
+   # Latency checks
+   # latency_parser = cmd2.Cmd2ArgumentParser()
+   # latency_parser
 
 if __name__ == '__main__':
     import sys
