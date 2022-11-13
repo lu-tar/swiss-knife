@@ -1,3 +1,4 @@
+"""
 from scapy.all import sr1, IP, ICMP, conf, get_if_addr
 ip = get_if_addr("Wi-Fi")
 print(ip)
@@ -17,3 +18,9 @@ uname = subprocess.Popen(["ver"], stdout=subprocess.PIPE, shell=True)
 uname_output = uname.communicate()[0]
 a = uname_output.decode('utf8', errors='ignore').strip()
 print(a)
+"""
+semaforo = "verde"
+motore = "acceso"
+
+if semaforo == "verde" and motore != "spento":
+    print("gas")

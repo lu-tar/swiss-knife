@@ -1,32 +1,51 @@
 #!/usr/bin/env python
-import cmd2
+import cmd2, subprocess, re, requests, platform
 from scapy.all import sr1, IP, ICMP
 from pythonping import ping
 from datetime import datetime
-import subprocess
-import re
-import requests
+from rich.console import Console
+from rich.table import Table
+
+# Globals chilling on top of the code
+IP_REGEX = "\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3}"
+BANNER = False
+#INTERNET_IP = str(requests.get("https://api.ipify.org?format=text").text)
+INTERNET_IP = "Do not disturb API during tests"
+OPERATING_SYSTEM = platform.system()
+
 # Pre cmd-loop interface info interrogation using netsh windows command
-# if ver is empty you are in Linux machines and the script skips netsh commands
+# checks OPERATING_SYSTEM to skips netsh commands
 # using api.ipify.org to pull the public ip address
-print("Public IP:" + str(requests.get("https://api.ipify.org?format=text").text))
-uname = subprocess.Popen(["ver"], stdout=subprocess.PIPE, shell=True)
-uname_output = uname.communicate()[0]
-if uname_output == "":
-   pass
-else:
+
+if BANNER == True and OPERATING_SYSTEM == "Windows":
+   # Netsh interrogation
    netsh_ethernet_if = subprocess.Popen(["netsh","interface","ip","show", "config", "Ethernet"], stdout=subprocess.PIPE, shell=True)
    ethernet_output = netsh_ethernet_if.communicate()[0]
-   ethernet_info = re.findall("\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3}", str(ethernet_output))
-   print("Ethernet IP:", end=" ")
-   for i in ethernet_info: print(i, end=" ")
-   print("\n")
+   ethernet_info = re.findall(IP_REGEX, str(ethernet_output))
+
    netsh_wifi_if = subprocess.Popen(["netsh","interface","ip","show", "config", "Wi-Fi"], stdout=subprocess.PIPE, shell=True)
    wifi_output = netsh_wifi_if.communicate()[0]
-   wifi_info = re.findall("\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3}", str(wifi_output))
-   print("Wi-Fi IP:", end=" ")
-   for i in wifi_info: print(i, end=" ")
-   print("\n")
+   wifi_info = re.findall(IP_REGEX, str(wifi_output))
+
+   # Intro table
+   intro_table = Table(title="My ip configuration")
+   # Columns
+   intro_table.add_column("🐢", justify="center", style="white")
+   intro_table.add_column("IP", justify="center", style="cyan")
+   intro_table.add_column("Network", justify="center", style="green")
+   intro_table.add_column("Mask", justify="center", style="green")
+   intro_table.add_column("Gate", justify="center", style="green")
+   intro_table.add_column("DNS", justify="center", style="magenta")
+   # Rows
+   intro_table.add_row("Internet", INTERNET_IP)
+   intro_table.add_row("Ethernet",ethernet_info[0], ethernet_info[1], ethernet_info[2], ethernet_info[3], ethernet_info[4])
+   intro_table.add_row("Wi-Fi", wifi_info[0], wifi_info[1], wifi_info[2], wifi_info[3], wifi_info[4])
+
+   console = Console()
+   console.print(intro_table)
+else:
+   pass
+
 #
 # CMD LOOP
 #
