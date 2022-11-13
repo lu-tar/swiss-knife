@@ -19,8 +19,11 @@ uname_output = uname.communicate()[0]
 a = uname_output.decode('utf8', errors='ignore').strip()
 print(a)
 """
-semaforo = "verde"
-motore = "acceso"
+def add():
+    print("ADD")
+    return
 
-if semaforo == "verde" and motore != "spento":
-    print("gas")
+def wow():
+    add()
+
+wow()

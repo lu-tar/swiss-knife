@@ -5,55 +5,126 @@ from pythonping import ping
 from datetime import datetime
 from rich.console import Console
 from rich.table import Table
+from rich import print
 
 # Globals chilling on top of the code
 IP_REGEX = "\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3}"
-BANNER = False
+BANNER = True
 #INTERNET_IP = str(requests.get("https://api.ipify.org?format=text").text)
 INTERNET_IP = "Do not disturb API during tests"
 OPERATING_SYSTEM = platform.system()
+RICH_CONSOLE = Console()
+CURRENT_TIME = datetime.now()
+CLOCK_TIME = CURRENT_TIME.strftime("%H:%M:%S")
 
 # Pre cmd-loop interface info interrogation using netsh windows command
 # checks OPERATING_SYSTEM to skips netsh commands
 # using api.ipify.org to pull the public ip address
 
-if BANNER == True and OPERATING_SYSTEM == "Windows":
-   # Netsh interrogation
-   netsh_ethernet_if = subprocess.Popen(["netsh","interface","ip","show", "config", "Ethernet"], stdout=subprocess.PIPE, shell=True)
-   ethernet_output = netsh_ethernet_if.communicate()[0]
-   ethernet_info = re.findall(IP_REGEX, str(ethernet_output))
+def interfaces_table():
+   if BANNER == True and OPERATING_SYSTEM == "Windows":
+      # Netsh interrogation
+      netsh_ethernet_if = subprocess.Popen(["netsh","interface","ip","show", "config", "Ethernet"], stdout=subprocess.PIPE, shell=True)
+      ethernet_output = netsh_ethernet_if.communicate()[0]
+      ethernet_info = re.findall(IP_REGEX, str(ethernet_output)) # Array of IP
 
-   netsh_wifi_if = subprocess.Popen(["netsh","interface","ip","show", "config", "Wi-Fi"], stdout=subprocess.PIPE, shell=True)
-   wifi_output = netsh_wifi_if.communicate()[0]
-   wifi_info = re.findall(IP_REGEX, str(wifi_output))
+      netsh_wifi_if = subprocess.Popen(["netsh","interface","ip","show", "config", "Wi-Fi"], stdout=subprocess.PIPE, shell=True)
+      wifi_output = netsh_wifi_if.communicate()[0]
+      wifi_info = re.findall(IP_REGEX, str(wifi_output)) # Array of IP
 
-   # Intro table
-   intro_table = Table(title="My ip configuration")
-   # Columns
-   intro_table.add_column("🐢", justify="center", style="white")
-   intro_table.add_column("IP", justify="center", style="cyan")
-   intro_table.add_column("Network", justify="center", style="green")
-   intro_table.add_column("Mask", justify="center", style="green")
-   intro_table.add_column("Gate", justify="center", style="green")
-   intro_table.add_column("DNS", justify="center", style="magenta")
-   # Rows
-   intro_table.add_row("Internet", INTERNET_IP)
-   intro_table.add_row("Ethernet",ethernet_info[0], ethernet_info[1], ethernet_info[2], ethernet_info[3], ethernet_info[4])
-   intro_table.add_row("Wi-Fi", wifi_info[0], wifi_info[1], wifi_info[2], wifi_info[3], wifi_info[4])
+      netsh_eth_usb_if = subprocess.Popen(["netsh","interface","ip","show", "config", "Ethernet 7"], stdout=subprocess.PIPE, shell=True)
+      eth_usb_output = netsh_eth_usb_if.communicate()[0]
+      eth_usb_info = re.findall(IP_REGEX, str(eth_usb_output)) # Array of IP
 
-   console = Console()
-   console.print(intro_table)
-else:
-   pass
+      # Intro table
+      intro_table = Table(title="My ip configuration")
+      # Columns
+      intro_table.add_column("🐢", justify="center", style="white")
+      intro_table.add_column("IP", justify="center", style="cyan")
+      intro_table.add_column("Network", justify="center", style="green")
+      intro_table.add_column("Mask", justify="center", style="green")
+      intro_table.add_column("Gate", justify="center", style="green")
+      intro_table.add_column("DNS", justify="center", style="magenta")
+      # Rows
+      intro_table.add_row("Internet", INTERNET_IP)
+      if len(ethernet_info) == 5:
+         intro_table.add_row("Ethernet",ethernet_info[0], ethernet_info[1], ethernet_info[2], ethernet_info[3], ethernet_info[4])
+      else:
+         pass
+      if len(wifi_info) == 5:
+         intro_table.add_row("Wi-Fi", wifi_info[0], wifi_info[1], wifi_info[2], wifi_info[3], wifi_info[4])
+      else:
+         pass
+      if len(eth_usb_info) == 5:
+         intro_table.add_row("Ethernet USB-C",eth_usb_info[0], eth_usb_info[1], eth_usb_info[2], eth_usb_info[3], eth_usb_info[4])
+      else:
+         pass
+
+      RICH_CONSOLE.print(intro_table)
+   else:
+      pass
+   return
+
+interfaces_table()
 
 #
 # CMD LOOP
 #
 class FirstApp(cmd2.Cmd):
-   CURRENT_TIME = datetime.now()
-   CLOCK_TIME = CURRENT_TIME.strftime("%H:%M:%S")
    prompt = "# "
    intro = "Welcome! This is an intro " + CLOCK_TIME + "\n"
+   # Show ip interfaces table
+   def do_ip(self, args):
+      interfaces_table()
+   # Show wifi statistics from netsh
+   def do_wifistat(self):
+      CURRENT_TIME = datetime.now()
+      CLOCK_TIME = CURRENT_TIME.strftime("%H:%M:%S")
+      netsh_wifi_stats = subprocess.run(['netsh', 'wlan', 'show', 'interfaces'], stdout=subprocess.PIPE)
+      outStr = netsh_wifi_stats.stdout.decode('utf-8', 'ignore')
+      if "disconnessa" in outStr:
+         print("No Wi-fi connection")
+      else:
+         for e in outStr.splitlines():
+            if "BSSID" in e: 
+               bssid = e[29:]
+            elif "Canale" in e: 
+               channel = e[27:]
+            elif "ricezione" in e: 
+               downRate = e[32:]
+            elif "trasmissione" in e: 
+               upRate = e[34:]
+            elif "frequenza" in e: 
+               fq = e[29:]
+            elif "Segnale" in e: 
+               signal = e[26:]
+
+         #print ("%s, %s, %s, %s, %s, %s" % (bssid, channel, downRate, upRate, fq, signal))
+         # Wifi statistics table from netsh
+         wifi_table = Table(title="Wi-Fi statistics")
+         # Columns
+         wifi_table.add_column("⏱️", justify="center", style="white")
+         wifi_table.add_column("BSSID", justify="center", style="white")
+         wifi_table.add_column("Download rate", justify="center", style="yellow")
+         wifi_table.add_column("Upload rate", justify="center", style="yellow")
+         wifi_table.add_column("Frequency", justify="center", style="green")
+         wifi_table.add_column("Channel", justify="center", style="green")
+         wifi_table.add_column("Signal", justify="center", style="green")
+         # Rows
+         wifi_table.add_row(CLOCK_TIME, bssid, downRate, upRate, fq, channel, signal)
+         RICH_CONSOLE.print(wifi_table)
+
+   # Show my public IP address
+   pubip_parser = cmd2.Cmd2ArgumentParser()
+   pubip_parser.add_argument('-v', '--verbose', default=False, action='store_true', help='show ip public info from ifconfing.co API')
+   @cmd2.with_argparser(pubip_parser)
+   def do_pub(self, args):
+      if args.verbose:
+         print("Verbose API call")
+         ifconfig_api = requests.get("http://ifconfig.co/json").json()
+         print(ifconfig_api)
+      else:
+         print(INTERNET_IP)
 
    # Ping using scapy lib
    sping_parser = cmd2.Cmd2ArgumentParser()
@@ -77,7 +148,7 @@ class FirstApp(cmd2.Cmd):
    ping_parser.add_argument('-spw', '--spawn', default=False, action="store_true")
    @cmd2.with_argparser(ping_parser)
    def do_ping(self, args):
-      if uname_output != "":
+      if OPERATING_SYSTEM == "Windows":
          if args.spawn:
             for i in range(0,args.repeat):
                CURRENT_TIME = datetime.now()
