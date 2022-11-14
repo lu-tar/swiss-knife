@@ -110,7 +110,7 @@ class FirstApp(cmd2.Cmd):
 
 
    # Show wifi statistics from netsh
-   def do_wifistat(self):
+   def do_wifistat(self, args):
       CURRENT_TIME = datetime.now()
       CLOCK_TIME = CURRENT_TIME.strftime("%H:%M:%S")
       netsh_wifi_stats = subprocess.run(['netsh', 'wlan', 'show', 'interfaces'], stdout=subprocess.PIPE)
@@ -118,6 +118,7 @@ class FirstApp(cmd2.Cmd):
       if "disconnessa" in outStr:
          print("No Wi-fi connection")
       else:
+         # Need improvments
          for e in outStr.splitlines():
             if "BSSID" in e: 
                bssid = e[29:]
@@ -134,13 +135,13 @@ class FirstApp(cmd2.Cmd):
 
          #print ("%s, %s, %s, %s, %s, %s" % (bssid, channel, downRate, upRate, fq, signal))
          # Wifi statistics table from netsh
-         wifi_table = Table(title="Wi-Fi statistics")
+         wifi_table = Table(title="Wi-Fi statistics from netsh")
          # Columns
          wifi_table.add_column("⏱️", justify="center", style="white")
          wifi_table.add_column("BSSID", justify="center", style="white")
          wifi_table.add_column("Download rate", justify="center", style="yellow")
          wifi_table.add_column("Upload rate", justify="center", style="yellow")
-         wifi_table.add_column("Frequency", justify="center", style="green")
+         wifi_table.add_column("Protocol", justify="center", style="green")
          wifi_table.add_column("Channel", justify="center", style="green")
          wifi_table.add_column("Signal", justify="center", style="green")
          # Rows
