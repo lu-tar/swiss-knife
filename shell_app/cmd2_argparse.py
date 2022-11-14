@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import cmd2, subprocess, re, requests, platform
+import cmd2, subprocess, re, requests, platform, csv
 from scapy.all import sr1, IP, ICMP
 from pythonping import ping
 from datetime import datetime
@@ -74,6 +74,42 @@ interfaces_table()
 class FirstApp(cmd2.Cmd):
    prompt = "# "
    intro = "Welcome! This is an intro " + CLOCK_TIME + "\n"
+
+
+   # Port/protocol finder
+   portlist_parser = cmd2.Cmd2ArgumentParser()
+   portlist_parser.add_argument(dest='value', help='Port or protocol')
+   @cmd2.with_argparser(portlist_parser)
+   def do_portlist(self, args):
+      with open('service-names-port-numbers.csv', 'r') as file:
+         reader = csv.reader(file, delimiter=",")
+         if type(args.value) == str:
+            for row in reader:
+               if args.value in row:
+                  print(row[:4])
+         else:
+            for row in reader:
+               if re.search(r'\b' + args.value + r'\b', str(row)):
+                  print(row[:4])
+
+
+   # tcpRTT calcs TCP RTT to a host usig tcp_latency library
+   # common arguments like port number (443 by default), repetitions and timeout (both 5 and 1 by default)
+   # if strict is specified only the latency is displayer not the ping-like statistics
+   latency_parser = cmd2.Cmd2ArgumentParser()
+   latency_parser.add_argument(dest='host', type=str, help='Measure the TCP latency between you to a specified host')
+   latency_parser.add_argument('-p', '--port', type=int, default=443, nargs='?', help='Destination port')
+   latency_parser.add_argument('-r', '--repeat', type=int, default=5, nargs='?', help='How many time measure_latency runs')
+   latency_parser.add_argument('-t', '--timeout', type=int, default=1, nargs='?', help='Measure_latency timeout')
+   latency_parser.add_argument('-s', '--strict', default=False, action='store_true', help='Strict output')
+   @cmd2.with_argparser(latency_parser)
+   def do_tcpRTT(self, args):
+      if args.strict:
+         latency_results = measure_latency(host=args.host, runs=args.repeat, timeout=args.timeout, port=args.port)
+         for i in latency_results:
+            print(str(round(i,2)))
+      else:
+         measure_latency(host=args.host, runs=args.repeat, timeout=args.timeout, port=args.port, human_output=True)
 
    # Show interfaces: 
    # default is eth
