@@ -48,15 +48,15 @@ def interfaces_table():
       intro_table.add_column("DNS", justify="center", style="magenta")
       # Rows
       intro_table.add_row("Internet", INTERNET_IP)
-      if len(ethernet_info) == 5:
+      if len(ethernet_info) == 5: # If the interface is disabled I have one or zero regex match so I check 5 items
          intro_table.add_row("Ethernet",ethernet_info[0], ethernet_info[1], ethernet_info[2], ethernet_info[3], ethernet_info[4])
       else:
          pass
-      if len(wifi_info) == 5:
+      if len(wifi_info) == 5: # If the interface is disabled I have one or zero regex match so I check 5 items
          intro_table.add_row("Wi-Fi", wifi_info[0], wifi_info[1], wifi_info[2], wifi_info[3], wifi_info[4])
       else:
          pass
-      if len(eth_usb_info) == 5:
+      if len(eth_usb_info) == 5: # If the interface is disabled I have one or zero regex match so I check 5 items
          intro_table.add_row("Ethernet USB-C",eth_usb_info[0], eth_usb_info[1], eth_usb_info[2], eth_usb_info[3], eth_usb_info[4])
       else:
          pass
@@ -69,14 +69,15 @@ def interfaces_table():
 interfaces_table()
 
 #
-# CMD LOOP
+# CMD LOOP APP
 #
 class FirstApp(cmd2.Cmd):
    prompt = "# "
    intro = "Welcome! This is an intro " + CLOCK_TIME + "\n"
 
-   # Show interfaces: default is eth
-   # 
+   # Show interfaces: 
+   # default is eth
+   # verbose and wifi with args
    ip_parser = cmd2.Cmd2ArgumentParser()
    ip_parser.add_argument('-w', '--wifi', default=False, action='store_true', help='show wireless interface ip')
    ip_parser.add_argument('-v', '--verbose', default=False, action='store_true', help='show interfaces table')
@@ -89,21 +90,21 @@ class FirstApp(cmd2.Cmd):
          netsh_wifi_if = subprocess.Popen(["netsh","interface","ip","show", "config", "Wi-Fi"], stdout=subprocess.PIPE, shell=True)
          wifi_output = netsh_wifi_if.communicate()[0]
          wifi_info = re.findall(IP_REGEX, str(wifi_output)) # Array of IP
-         if len(wifi_info) == 5:
+         if len(wifi_info) == 5: # If the interface is disabled I have one or zero regex match so I check 5 items
             for i in ethernet_info: print(i, end=" ")
             print("\n")
       elif args.usb:
          netsh_eth_usb_if = subprocess.Popen(["netsh","interface","ip","show", "config", "Ethernet 7"], stdout=subprocess.PIPE, shell=True)
          eth_usb_output = netsh_eth_usb_if.communicate()[0]
          eth_usb_info = re.findall(IP_REGEX, str(eth_usb_output)) # Array of IP
-         if len(eth_usb_info) == 5:
+         if len(eth_usb_info) == 5: # If the interface is disabled I have one or zero regex match so I check 5 items
             for i in eth_usb_info: print(i, end=" ")
             print("\n")
       else:
          netsh_ethernet_if = subprocess.Popen(["netsh","interface","ip","show", "config", "Ethernet"], stdout=subprocess.PIPE, shell=True)
          ethernet_output = netsh_ethernet_if.communicate()[0]
          ethernet_info = re.findall(IP_REGEX, str(ethernet_output)) # Array of IP
-         if len(ethernet_info) == 5:
+         if len(ethernet_info) == 5: # If the interface is disabled I have one or zero regex match so I check 5 items
             for i in ethernet_info: print(i, end=" ")
             print("\n")
 
