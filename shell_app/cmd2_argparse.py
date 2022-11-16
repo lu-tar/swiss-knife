@@ -10,7 +10,7 @@ from tcp_latency import measure_latency
 
 # Globals chilling on top of the code
 IP_REGEX = "\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3}"
-BANNER = True
+BANNER = False
 #INTERNET_IP = str(requests.get("https://api.ipify.org?format=text").text)
 INTERNET_IP = "Do not disturb API"
 OPERATING_SYSTEM = platform.system()
@@ -19,7 +19,7 @@ CURRENT_TIME = datetime.now()
 CLOCK_TIME = CURRENT_TIME.strftime("%H:%M:%S")
 
 # Pre cmd-loop interface info interrogation using netsh windows command
-# checks OPERATING_SYSTEM to skips netsh commands
+# checks OPERATING_SYSTEM to skips netsh commands and BANNER variable <-- implementare load di configurazione alla "linux"
 # using api.ipify.org to pull the public ip address
 
 def interfaces_table():
@@ -76,6 +76,47 @@ class FirstApp(cmd2.Cmd):
    intro = "Welcome! This is an intro " + CLOCK_TIME + "\n"
 
 
+   
+   # Putty automation: the command putty will open by default a ssh connection with admin and port 22, telnet is optional
+   putty_parser = cmd2.Cmd2ArgumentParser()
+   putty_parser.add_argument(dest='host', type=str)
+   putty_parser.add_argument('-p', '--port', type=str, default="22", nargs='?', help='Destination port')
+   putty_parser.add_argument('-l', '--username', type=str, default="admin", nargs='?', help='Username')
+   putty_parser.add_argument('-pw', '--password', type=str, nargs='?', help='Measure_putty timeout')
+   putty_parser.add_argument('-t', '--telnet', default=False, action='store_true', help='telnet session')
+   @cmd2.with_argparser(putty_parser)
+   def do_putty(self, args):
+      if args.telnet == True:
+         subprocess.Popen(["C:\Program Files\PuTTY\putty.exe", "-telnet", args.host], stdout=subprocess.PIPE)
+      elif args.password == None:
+         subprocess.Popen(["C:\Program Files\PuTTY\putty.exe", "-ssh", args.host, "-l", args.username, "-P", args.port], stdout=subprocess.PIPE)
+      else:
+         subprocess.Popen(["C:\Program Files\PuTTY\putty.exe", "-ssh", args.host, "-l", args.username, "-pw", args.password, "-P", args.port], stdout=subprocess.PIPE)
+   
+   
+   # Binary to decimal conversion
+   decimal_parser = cmd2.Cmd2ArgumentParser()
+   decimal_parser.add_argument(dest='value', type=int, help='Binary to decimal conversion')
+   @cmd2.with_argparser(decimal_parser)
+   def do_decimal(self, args):
+      decimal = 0
+      power = 1
+      while args.value>0:
+         rem = args.value%10
+         args.value = args.value//10
+         decimal += rem*power
+         power = power*2
+      print(decimal)
+
+   
+   # Decimal to binary conversion
+   binary_parser = cmd2.Cmd2ArgumentParser()
+   binary_parser.add_argument(dest='value', type=int, help='Decimal to binary conversion')
+   @cmd2.with_argparser(binary_parser)
+   def do_binary(self, args):
+      print(bin(args.value)[2:])
+
+   
    # Port/protocol finder
    portlist_parser = cmd2.Cmd2ArgumentParser()
    portlist_parser.add_argument(dest='value', help='Port or protocol')
@@ -210,7 +251,7 @@ class FirstApp(cmd2.Cmd):
          else:
             print("OK!")
    
-   # Ping using pythonping + if spw argument is specified the script try to open a shell pinging
+   # Ping using pythonping + if spw argument is specified the script try to open a shell pinging (NOT WORKING NEEDS ATTENTION)
    # Using uname_output we can check if we are in a Linux o Win machine
    ping_parser = cmd2.Cmd2ArgumentParser()
    ping_parser.add_argument(dest='address',type=str, help='IP Address')
