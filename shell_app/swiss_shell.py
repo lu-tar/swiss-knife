@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import cmd2, subprocess, re, requests, platform, csv
+import cmd2, subprocess, re, requests, platform, csv, ipaddress
 from scapy.all import sr1, IP, ICMP
 from pythonping import ping
 from datetime import datetime
@@ -75,7 +75,17 @@ class FirstApp(cmd2.Cmd):
    prompt = "# "
    intro = "Welcome! This is an intro " + CLOCK_TIME + "\n"
 
-
+   # ipaddress — IPv4/IPv6 manipulation library
+   ipadd_parser = cmd2.Cmd2ArgumentParser()
+   ipadd_parser.add_argument('-c', '--check', dest='ipadd', type=str, nargs='?', help='Apply is_multicast, is_private ecc')
+   @cmd2.with_argparser(ipadd_parser)
+   def do_ipadd(ipadd, args):
+      print(args.ipadd)
+      print("%s \n %s" % 
+      (ipaddress.ip_address(args.ipadd).is_private,
+      ipaddress.ip_address(args.ipadd).is_multicast,
+      
+      ))
    
    # Putty automation: the command putty will open by default a ssh connection with admin and port 22, telnet is optional
    putty_parser = cmd2.Cmd2ArgumentParser()
