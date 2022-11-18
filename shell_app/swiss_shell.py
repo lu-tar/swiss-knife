@@ -7,6 +7,7 @@ from rich.console import Console
 from rich.table import Table
 from rich import print
 from tcp_latency import measure_latency
+from ipaddress import ip_network
 
 # Globals chilling on top of the code
 IP_REGEX = "\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3}"
@@ -74,18 +75,22 @@ interfaces_table()
 class FirstApp(cmd2.Cmd):
    prompt = "# "
    intro = "Welcome! This is an intro " + CLOCK_TIME + "\n"
+   # subnet printer
 
    # ipaddress — IPv4/IPv6 manipulation library
    ipadd_parser = cmd2.Cmd2ArgumentParser()
    ipadd_parser.add_argument('-c', '--check', dest='ipadd', type=str, nargs='?', help='Apply is_multicast, is_private ecc')
    @cmd2.with_argparser(ipadd_parser)
    def do_ipadd(ipadd, args):
-      print(args.ipadd)
-      print("%s \n %s" % 
-      (ipaddress.ip_address(args.ipadd).is_private,
-      ipaddress.ip_address(args.ipadd).is_multicast,
-      
+      only_ip = re.findall(IP_REGEX, args.ipadd)
+      print(only_ip[0])
+      print("is_private: %s\nis_multicast: %s\nis_reserved: %s" % 
+      (ipaddress.ip_address(only_ip[0]).is_private,
+      ipaddress.ip_address(only_ip[0]).is_multicast,
+      ipaddress.ip_address(only_ip[0]).is_reserved
       ))
+      print(list(ip_network(args.ipadd).hosts()))
+
    
    # Putty automation: the command putty will open by default a ssh connection with admin and port 22, telnet is optional
    putty_parser = cmd2.Cmd2ArgumentParser()
@@ -111,11 +116,16 @@ class FirstApp(cmd2.Cmd):
    def do_decimal(self, args):
       decimal = 0
       power = 1
+      print(args.value)
       while args.value>0:
-         rem = args.value%10
+         resto = args.value%10
+
          args.value = args.value//10
-         decimal += rem*power
+
+         decimal += resto*power
+
          power = power*2
+
       print(decimal)
 
    
