@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import cmd2, subprocess, re, requests, platform, csv, ipaddress
+import cmd2, subprocess, re, requests, platform, csv, ipaddress, calendar
 from scapy.all import sr1, IP, ICMP
 from pythonping import ping
 from datetime import datetime
@@ -75,7 +75,40 @@ interfaces_table()
 class FirstApp(cmd2.Cmd):
    prompt = "# "
    intro = "Welcome! This is an intro " + CLOCK_TIME + "\n"
-   # subnet printer
+   #
+   # Pulling mac vendor from https://api.macvendors.com/FC:FB:FB:01:FA:21
+   def do_mac(selg,args):
+      print(requests.get("https://api.macvendors.com/" + args).text)
+
+   # time
+   def do_time(self,args):
+      CURRENT_TIME = datetime.now()
+      CLOCK_TIME = CURRENT_TIME.strftime("%H:%M:%S")
+      year = CURRENT_TIME.strftime("%Y")
+      month = CURRENT_TIME.strftime("%m")
+      print(CLOCK_TIME)
+      print(calendar.month(int(year), int(month)))
+
+   # nslookup
+   def do_nslookup(self,args):
+      nslookup_cmd = subprocess.run(["nslookup",str(args)], stdout=subprocess.PIPE)
+      print(nslookup_cmd.stdout.decode('utf-8', 'ignore'))
+
+   # subnet printer from decimal value
+   def do_sub(self,args):
+      mask = int(args)
+      if mask > 32 or mask < 0:
+         pass
+      else:
+         bin_train = "00000000000000000000000000000000"
+         bin_train = bin_train.replace("0","1",mask)
+         first_oct = int(bin_train[0:8],2)
+         second_oct = int(bin_train[8:16],2)
+         third_oct = int(bin_train[16:24],2)
+         fourth_oct = int(bin_train[24:32],2)
+
+         print ("%s.%s.%s.%s" % (first_oct, second_oct, third_oct, fourth_oct))
+
 
    # ipaddress — IPv4/IPv6 manipulation library
    ipadd_parser = cmd2.Cmd2ArgumentParser()
@@ -116,19 +149,13 @@ class FirstApp(cmd2.Cmd):
    def do_decimal(self, args):
       decimal = 0
       power = 1
-      print(args.value)
       while args.value>0:
          resto = args.value%10
-
          args.value = args.value//10
-
          decimal += resto*power
-
          power = power*2
-
       print(decimal)
 
-   
    # Decimal to binary conversion
    binary_parser = cmd2.Cmd2ArgumentParser()
    binary_parser.add_argument(dest='value', type=int, help='Decimal to binary conversion')
@@ -136,13 +163,12 @@ class FirstApp(cmd2.Cmd):
    def do_binary(self, args):
       print(bin(args.value)[2:])
 
-   
    # Port/protocol finder
    portlist_parser = cmd2.Cmd2ArgumentParser()
    portlist_parser.add_argument(dest='value', help='Port or protocol')
    @cmd2.with_argparser(portlist_parser)
    def do_portlist(self, args):
-      with open('service-names-port-numbers.csv', 'r') as file:
+      with open('csv/service-names-port-numbers.csv', 'r') as file:
          reader = csv.reader(file, delimiter=",")
          if type(args.value) == str:
             for row in reader:
@@ -214,6 +240,8 @@ class FirstApp(cmd2.Cmd):
       outStr = netsh_wifi_stats.stdout.decode('utf-8', 'ignore')
       if "disconnessa" in outStr:
          print("No Wi-fi connection")
+      elif "Non disponibile" in outStr:
+         print("No Wi-fi connection")
       else:
          # Need improvments
          for e in outStr.splitlines():
@@ -277,10 +305,13 @@ class FirstApp(cmd2.Cmd):
    ping_parser.add_argument(dest='address',type=str, help='IP Address')
    ping_parser.add_argument('-r', '--repeat', type=int, default=3, nargs='?', help='output [n] times')
    ping_parser.add_argument('-spw', '--spawn', default=False, action="store_true")
+   ping_parser.add_argument('-t', '--loop', default=False, action="store_true")
    @cmd2.with_argparser(ping_parser)
    def do_ping(self, args):
       if OPERATING_SYSTEM == "Windows":
          if args.spawn:
+            subprocess.run(["start", "cmd", "/K", "ping", "-t", args.address], shell=True)
+         else:
             for i in range(0,args.repeat):
                CURRENT_TIME = datetime.now()
                CLOCK_TIME = CURRENT_TIME.strftime("%H:%M:%S")
@@ -291,7 +322,14 @@ class FirstApp(cmd2.Cmd):
             #with open ("ping_conf", "w") as file:
             #   file.write(args.address + "\n" + args.repeat)
             subprocess.Popen('x-terminal-emulator -e "bash -c \\"ping 1.1.1.1; exec bash\\""', shell=True)
-   
+
+   # Alias of ping -spw
+   def do_pingt(self, args):
+      if OPERATING_SYSTEM == "Windows":
+         subprocess.run(["start", "cmd", "/K", "ping", "-t", str(args)], shell=True)
+      else:
+         pass
+
    # Latency checks
    # latency_parser = cmd2.Cmd2ArgumentParser()
    # latency_parser
