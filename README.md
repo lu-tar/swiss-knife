@@ -68,7 +68,7 @@ A copilot for networking tasks written in Python cmd2.
 ## Obsidian
 1. Open a markdown with a template
 
-## Fun CLI enviroment
+## *Prettify* the CLI enviroment
 1. A big `while True:`
 	1. [CMD library](https://stackoverflow.com/questions/9340391/python-interactive-shell-type-application)
 	2. https://code-maven.com/interactive-shell-with-cmd-in-python
