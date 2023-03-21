@@ -1,5 +1,5 @@
 # swiss-knife
-A copilot for networking tasks written in Python cmd2.
+A multipurpose shell for networking tasks written in Python cmd2.
 
 ## Features:
 ## *Self* network
