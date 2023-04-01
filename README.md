@@ -20,3 +20,4 @@ Spring '23 to-do list:
 - General Windows app automation maybe with PyAutogui or Selenium
 - Add templates to swiss knife
 - MD5 / SHA256 calculator
+- https://cyberchef.org/
