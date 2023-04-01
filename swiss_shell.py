@@ -194,7 +194,8 @@ class FirstApp(cmd2.Cmd):
    def do_portlist(self, args):
       with open('csv/service-names-port-numbers.csv', 'r') as file:
          reader = csv.reader(file, delimiter=",")
-         if type(args.value) == str:
+         # isinstance e' meglio di type
+         if isinstance(args.value,str):
             for row in reader:
                if args.value in row:
                   print(row[:4])
