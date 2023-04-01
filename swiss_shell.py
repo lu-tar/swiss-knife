@@ -33,70 +33,24 @@ from rich import print
 from tcp_latency import measure_latency
 from ipaddress import ip_network
 
-# Globals chilling on top of the code
-IP_REGEX = "\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3}"
-BANNER = False
-#INTERNET_IP = str(requests.get("https://api.ipify.org?format=text").text)
-INTERNET_IP = "Do not disturb API"
+from swiss_conf import *
+import swiss_func 
+
 OPERATING_SYSTEM = platform.system()
 RICH_CONSOLE = Console()
 CURRENT_TIME = datetime.now()
 CLOCK_TIME = CURRENT_TIME.strftime("%H:%M:%S")
 
 # Pre cmd-loop interface info interrogation using netsh windows command
-# checks OPERATING_SYSTEM to skips netsh commands and BANNER variable <-- implementare load di configurazione alla "linux"
+# checks OPERATING_SYSTEM to skips netsh commands and BANNER variable
 # using api.ipify.org to pull the public ip address
 
-def interfaces_table():
-   if BANNER == True and OPERATING_SYSTEM == "Windows":
-      # Netsh interrogation
-      netsh_ethernet_if = subprocess.Popen(["netsh","interface","ip","show", "config", "Ethernet"], stdout=subprocess.PIPE, shell=True)
-      ethernet_output = netsh_ethernet_if.communicate()[0]
-      ethernet_info = re.findall(IP_REGEX, str(ethernet_output)) # Array of IP
-
-      netsh_wifi_if = subprocess.Popen(["netsh","interface","ip","show", "config", "Wi-Fi"], stdout=subprocess.PIPE, shell=True)
-      wifi_output = netsh_wifi_if.communicate()[0]
-      wifi_info = re.findall(IP_REGEX, str(wifi_output)) # Array of IP
-
-      netsh_eth_usb_if = subprocess.Popen(["netsh","interface","ip","show", "config", "Ethernet 7"], stdout=subprocess.PIPE, shell=True)
-      eth_usb_output = netsh_eth_usb_if.communicate()[0]
-      eth_usb_info = re.findall(IP_REGEX, str(eth_usb_output)) # Array of IP
-
-      # Intro table
-      intro_table = Table(title="My ip configuration")
-      # Columns
-      intro_table.add_column("🐢", justify="center", style="white")
-      intro_table.add_column("IP", justify="center", style="cyan")
-      intro_table.add_column("Network", justify="center", style="green")
-      intro_table.add_column("Mask", justify="center", style="green")
-      intro_table.add_column("Gate", justify="center", style="green")
-      intro_table.add_column("DNS", justify="center", style="magenta")
-      # Rows
-      intro_table.add_row("Internet", INTERNET_IP)
-      if len(ethernet_info) == 5: # If the interface is disabled I have one or zero regex match so I check 5 items
-         intro_table.add_row("Ethernet",ethernet_info[0], ethernet_info[1], ethernet_info[2], ethernet_info[3], ethernet_info[4])
-      else:
-         pass
-      if len(wifi_info) == 5: # If the interface is disabled I have one or zero regex match so I check 5 items
-         intro_table.add_row("Wi-Fi", wifi_info[0], wifi_info[1], wifi_info[2], wifi_info[3], wifi_info[4])
-      else:
-         pass
-      if len(eth_usb_info) == 5: # If the interface is disabled I have one or zero regex match so I check 5 items
-         intro_table.add_row("Ethernet USB-C",eth_usb_info[0], eth_usb_info[1], eth_usb_info[2], eth_usb_info[3], eth_usb_info[4])
-      else:
-         pass
-
-      RICH_CONSOLE.print(intro_table)
-   else:
-      pass
-   return
-
-interfaces_table()
+swiss_func.interfaces_table()
 
 #
 # CMD LOOP APP
 #
-class FirstApp(cmd2.Cmd):
+class SwissKnife(cmd2.Cmd):
    prompt = "# "
    intro = "Welcome! This is an intro " + CLOCK_TIME + "\n"
    #
@@ -239,7 +193,7 @@ class FirstApp(cmd2.Cmd):
          wifi_output = netsh_wifi_if.communicate()[0]
          wifi_info = re.findall(IP_REGEX, str(wifi_output)) # Array of IP
          if len(wifi_info) == 5: # If the interface is disabled I have one or zero regex match so I check 5 items
-            for i in ethernet_info: print(i, end=" ")
+            for i in wifi_info: print(i, end=" ")
             print("\n")
       elif args.usb:
          netsh_eth_usb_if = subprocess.Popen(["netsh","interface","ip","show", "config", "Ethernet 7"], stdout=subprocess.PIPE, shell=True)
@@ -361,5 +315,5 @@ class FirstApp(cmd2.Cmd):
 
 if __name__ == '__main__':
     import sys
-    c = FirstApp()
+    c = SwissKnife()
     sys.exit(c.cmdloop())
