@@ -40,6 +40,7 @@ OPERATING_SYSTEM = platform.system()
 RICH_CONSOLE = Console()
 CURRENT_TIME = datetime.now()
 CLOCK_TIME = CURRENT_TIME.strftime("%H:%M:%S")
+IP_REGEX = "\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3}"
 
 # Pre cmd-loop interface info interrogation using netsh windows command
 # checks OPERATING_SYSTEM to skips netsh commands and BANNER variable
