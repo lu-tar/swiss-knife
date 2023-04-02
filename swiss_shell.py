@@ -7,13 +7,12 @@ Spring to-do list:
 [ ] Feature to spawn a cmd.exe process + a specific ping to leaving the swiss knife shell free
 [ ] Bandwidth check
 [ ] Port scanner
-[ ] Byte calculator
 [ ] IP Geolocalization
 [ ] Crack password 7 with https://github.com/theevilbit/ciscot7 + other decryption tools
 [ ] Find a mac address vendor with https://macvendors.com/api
 [ ] Search a file for a list of keyword like an automated grep
 [ ] Tree listing files in directory + test on remote like Sharepoint
-[ ] Generate gncrypted notes on the fly
+[ ] Generate encrypted notes on the fly
 [ ] Obsidian markdown integration + cheatsheet
 [ ] File sharing with VPS / FTP automation
 [ ] SSH automation + template
@@ -23,14 +22,23 @@ Spring to-do list:
 [ ] MD5 / SHA256 calculator
 ----------------------------------------------------------------------------------------------------------------
 '''
-import cmd2, subprocess, re, requests, platform, csv, ipaddress, calendar
-from scapy.all import sr1, IP, ICMP
+import cmd2
+import subprocess
+import re
+import requests
+import platform
+import csv
+import calendar
+from scapy.all import sr1
+from scapy.all import IP
+from scapy.all import ICMP
 from pythonping import ping
 from datetime import datetime
 from rich.console import Console
 from rich.table import Table
 from rich import print
 from tcp_latency import measure_latency
+import ipaddress
 from ipaddress import ip_network
 
 from swiss_conf import *
@@ -39,42 +47,40 @@ import swiss_func
 OPERATING_SYSTEM = platform.system()
 RICH_CONSOLE = Console()
 CURRENT_TIME = datetime.now()
-CLOCK_TIME = CURRENT_TIME.strftime("%H:%M:%S")
+CLOCK_TIME = CURRENT_TIME.strftime(CLOCK_FORMAT)
 IP_REGEX = "\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3}"
 
 # Pre cmd-loop interface info interrogation using netsh windows command
 # checks OPERATING_SYSTEM to skips netsh commands and BANNER variable
 # using api.ipify.org to pull the public ip address
-
-swiss_func.swiss_func.interfaces_table()
+swiss_func.interfaces_table()
 
 #
 # CMD LOOP APP
 #
 class SwissKnife(cmd2.Cmd):
     prompt = "# "
-    intro = "Welcome! This is an intro " + CLOCK_TIME + "\n"
-    #
+    intro = ""
+    
     # Pulling mac vendor from https://api.macvendors.com/FC:FB:FB:01:FA:21
-    def do_mac(selg,args):
+    def do_mac(selg, args):
         print(requests.get("https://api.macvendors.com/" + args).text)
 
-    # time
-    def do_time(self,args):
+    # Print current time and a small calendar
+    def do_time(self, args):
         CURRENT_TIME = datetime.now()
-        CLOCK_TIME = CURRENT_TIME.strftime("%H:%M:%S")
         year = CURRENT_TIME.strftime("%Y")
         month = CURRENT_TIME.strftime("%m")
         print(CLOCK_TIME)
         print(calendar.month(int(year), int(month)))
 
-    # nslookup
-    def do_nslookup(self,args):
-        nslookup_cmd = subprocess.run(["nslookup",str(args)], stdout=subprocess.PIPE)
+    # nslookup of a host
+    def do_nslookup(self, args):
+        nslookup_cmd = subprocess.run(["nslookup",str(args)], stdout=subprocess.PIPE, help='nslookup [hostname]')
         print(nslookup_cmd.stdout.decode('utf-8', 'ignore'))
 
     # subnet printer from decimal value
-    def do_sub(self,args):
+    def do_sub(self, args, help='sub [integer between 0 and 32]'):
         mask = int(args)
         if mask > 32 or mask < 0:
             pass
@@ -88,7 +94,6 @@ class SwissKnife(cmd2.Cmd):
 
             print ("%s.%s.%s.%s" % (first_oct, second_oct, third_oct, fourth_oct))
 
-
     # ipaddress — IPv4/IPv6 manipulation library
     ipadd_parser = cmd2.Cmd2ArgumentParser()
     ipadd_parser.add_argument('-c', '--check', dest='ipadd', type=str, nargs='?', help='Apply is_multicast, is_private ecc')
@@ -97,12 +102,12 @@ class SwissKnife(cmd2.Cmd):
         only_ip = re.findall(IP_REGEX, args.ipadd)
         print(only_ip[0])
         print("is_private: %s\nis_multicast: %s\nis_reserved: %s" %
-        (ipaddress.ip_address(only_ip[0]).is_private,
-        ipaddress.ip_address(only_ip[0]).is_multicast,
-        ipaddress.ip_address(only_ip[0]).is_reserved
-        ))
+            (ipaddress.ip_address(only_ip[0]).is_private,
+            ipaddress.ip_address(only_ip[0]).is_multicast,
+            ipaddress.ip_address(only_ip[0]).is_reserved
+            )
+        )
         print(list(ip_network(args.ipadd).hosts()))
-
 
     # Putty automation: the command putty will open by default a ssh connection with admin and port 22, telnet is optional
     putty_parser = cmd2.Cmd2ArgumentParser()
@@ -120,7 +125,6 @@ class SwissKnife(cmd2.Cmd):
         else:
             subprocess.Popen(["C:\Program Files\PuTTY\putty.exe", "-ssh", args.host, "-l", args.username, "-pw", args.password, "-P", args.port], stdout=subprocess.PIPE)
 
-
     # Binary to decimal conversion
     decimal_parser = cmd2.Cmd2ArgumentParser()
     decimal_parser.add_argument(dest='value', type=int, help='Binary to decimal conversion')
@@ -128,7 +132,7 @@ class SwissKnife(cmd2.Cmd):
     def do_decimal(self, args):
         decimal = 0
         power = 1
-        while args.value>0:
+        while args.value > 0:
             resto = args.value%10
             args.value = args.value//10
             decimal += resto*power
@@ -158,7 +162,6 @@ class SwissKnife(cmd2.Cmd):
                 for row in reader:
                     if re.search(r'\b' + args.value + r'\b', str(row)):
                         print(row[:4])
-
 
     # tcpRTT calcs TCP RTT to a host usig tcp_latency library
     # common arguments like port number (443 by default), repetitions and timeout (both 5 and 1 by default)
@@ -210,7 +213,6 @@ class SwissKnife(cmd2.Cmd):
             if len(ethernet_info) == 5: # If the interface is disabled I have one or zero regex match so I check 5 items
                 for i in ethernet_info: print(i, end=" ")
                 print("\n")
-
 
     # Show wifi statistics from netsh
     def do_wifistat(self, args):
@@ -309,10 +311,6 @@ class SwissKnife(cmd2.Cmd):
             subprocess.run(["start", "cmd", "/K", "ping", "-t", str(args)], shell=True)
         else:
             pass
-
-    # Latency checks
-    # latency_parser = cmd2.Cmd2ArgumentParser()
-    # latency_parser
 
 if __name__ == '__main__':
     import sys

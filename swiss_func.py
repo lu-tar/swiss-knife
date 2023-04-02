@@ -1,8 +1,6 @@
 # Custom configuration
 from swiss_conf import *
-import subprocess
 import platform
-import re
 from datetime import datetime
 from rich.console import Console
 from rich.table import Table
@@ -49,4 +47,3 @@ def interfaces_table():
     else:
         pass
     return
-interfaces_table()
