@@ -3,6 +3,9 @@ A multipurpose shell for networking tasks written in Python cmd2.
 
 **Spring '23 to-do list**
 
+🛠️ Fix 🛠️
+- ipconfig calls with agnostic library like [psutil](https://pypi.org/project/psutil/)
+
 🚀 High priority 🚀
 - Change local ip address from static to dynamic
 - SSH automation + template
@@ -14,7 +17,6 @@ A multipurpose shell for networking tasks written in Python cmd2.
 - Obsidian markdown integration + cheatsheet
   - enhance docs links storage
 - Feature to spawn a cmd.exe process + a specific ping to leaving the swiss knife shell free
-  
 
 🐌 Low priority 🐌
 - Port scanner
@@ -34,4 +36,3 @@ A multipurpose shell for networking tasks written in Python cmd2.
 💡 Ideas 💡
 - [Is it possible to use a batch file to ping multiple IP addresses, each in its own window?](https://superuser.com/questions/1134344/is-it-possible-to-use-a-batch-file-to-ping-multiple-ip-addresses-each-in-its-ow)
 - [Networking-based python on GitHub](https://github.com/search?l=Python&q=networking&type=Repositories)
-- 

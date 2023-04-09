@@ -1,5 +1,7 @@
+import requests
 # File di configurazione per swiss_func ignorato da .gitignore
 CLOCK_FORMAT = "%H:%M:%S"
 # True or false for inial banner
 BANNER = True
 IP_INTERFACES_IGNORE = ["lo"]
+INTERNET_IP = str(requests.get("https://api.ipify.org?format=text").text)

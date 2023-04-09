@@ -30,15 +30,14 @@ IP_REGEX = "\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3}"
 # Pre cmd-loop interface info interrogation using netsh windows command
 # checks OPERATING_SYSTEM to skips netsh commands and BANNER variable
 # using api.ipify.org to pull the public ip address
-swiss_func.interfaces_table()
-
+swiss_func.interfaces_banner()
+swiss_func.show_motd()
 #
 # CMD LOOP APP
 #
 class SwissKnife(cmd2.Cmd):
     prompt = "# "
-    intro = ""
-    
+    intro = ''
     # Pulling mac vendor from https://api.macvendors.com/FC:FB:FB:01:FA:21
     def do_mac(selg, args):
         print(requests.get("https://api.macvendors.com/" + args).text)
@@ -162,34 +161,9 @@ class SwissKnife(cmd2.Cmd):
     # default is eth
     # verbose and wifi with args
     ip_parser = cmd2.Cmd2ArgumentParser()
-    ip_parser.add_argument('-w', '--wifi', default=False, action='store_true', help='show wireless interface ip')
-    ip_parser.add_argument('-v', '--verbose', default=False, action='store_true', help='show interfaces table')
-    ip_parser.add_argument('-usb', '--usb', default=False, action='store_true', help='show usb-c interface ip')
     @cmd2.with_argparser(ip_parser)
     def do_ip(self, args):
-        if args.verbose:
-            swiss_func.interfaces_table()
-        elif args.wifi:
-            netsh_wifi_if = subprocess.Popen(["netsh","interface","ip","show", "config", "Wi-Fi"], stdout=subprocess.PIPE, shell=True)
-            wifi_output = netsh_wifi_if.communicate()[0]
-            wifi_info = re.findall(IP_REGEX, str(wifi_output)) # Array of IP
-            if len(wifi_info) == 5: # If the interface is disabled I have one or zero regex match so I check 5 items
-                for i in wifi_info: print(i, end=" ")
-                print("\n")
-        elif args.usb:
-            netsh_eth_usb_if = subprocess.Popen(["netsh","interface","ip","show", "config", "Ethernet 7"], stdout=subprocess.PIPE, shell=True)
-            eth_usb_output = netsh_eth_usb_if.communicate()[0]
-            eth_usb_info = re.findall(IP_REGEX, str(eth_usb_output)) # Array of IP
-            if len(eth_usb_info) == 5: # If the interface is disabled I have one or zero regex match so I check 5 items
-                for i in eth_usb_info: print(i, end=" ")
-                print("\n")
-        else:
-            netsh_ethernet_if = subprocess.Popen(["netsh","interface","ip","show", "config", "Ethernet"], stdout=subprocess.PIPE, shell=True)
-            ethernet_output = netsh_ethernet_if.communicate()[0]
-            ethernet_info = re.findall(IP_REGEX, str(ethernet_output)) # Array of IP
-            if len(ethernet_info) == 5: # If the interface is disabled I have one or zero regex match so I check 5 items
-                for i in ethernet_info: print(i, end=" ")
-                print("\n")
+        swiss_func.interfaces_banner()
 
     # Show wifi statistics from netsh
     def do_wifistat(self, args):
