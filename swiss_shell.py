@@ -42,11 +42,11 @@ class SwissKnife(cmd2.Cmd):
     prompt = "# "
     intro = ''
     # Pulling mac vendor from https://api.macvendors.com/FC:FB:FB:01:FA:21
-    def do_mac(selg, args):
+    def do_macvendor(selg, args):
         print(requests.get("https://api.macvendors.com/" + args).text)
 
     # Print current time and a small calendar
-    def do_time(self, args):
+    def do_time(self, _):
         CURRENT_TIME = datetime.now()
         year = CURRENT_TIME.strftime("%Y")
         month = CURRENT_TIME.strftime("%m")
@@ -165,9 +165,9 @@ class SwissKnife(cmd2.Cmd):
     # Show interfaces:
     # default is eth
     # verbose and wifi with args
-    ip_parser = cmd2.Cmd2ArgumentParser()
-    @cmd2.with_argparser(ip_parser)
-    def do_ip(self, args):
+    iplist_parser = cmd2.Cmd2ArgumentParser()
+    @cmd2.with_argparser(iplist_parser)
+    def do_iplist(self, _):
         # Ciclio il dictionary psutil.net_if_addrs()
         for nic, addrs in psutil.net_if_addrs().items():
             # Per ogni interfaccia presente IP_INTERFACES_INCLUDE 
@@ -265,11 +265,18 @@ class SwissKnife(cmd2.Cmd):
             if args.spawn:
                 subprocess.run(["start", "cmd", "/K", "ping", "-t", args.address], shell=True)
             else:
-                for i in range(0,args.repeat):
-                    CURRENT_TIME = datetime.now()
-                    CLOCK_TIME = CURRENT_TIME.strftime("%H:%M:%S")
-                    print(CLOCK_TIME, end =" ")
-                    ping(args.address, verbose=True, count=1, interval=1)
+                if args.loop == False:
+                    for i in range(0, args.repeat):
+                        CURRENT_TIME = datetime.now()
+                        CLOCK_TIME = CURRENT_TIME.strftime("%H:%M:%S")
+                        print(CLOCK_TIME, end =" ")
+                        ping(args.address, verbose=True, count=1, interval=1)
+                else:
+                    while True:
+                        CURRENT_TIME = datetime.now()
+                        CLOCK_TIME = CURRENT_TIME.strftime("%H:%M:%S")
+                        print(CLOCK_TIME, end =" ")
+                        ping(args.address, verbose=True, count=1, interval=1)
         else:
             if args.spawn:
                 #with open ("ping_conf", "w") as file:
@@ -277,15 +284,18 @@ class SwissKnife(cmd2.Cmd):
                 subprocess.Popen('x-terminal-emulator -e "bash -c \\"ping 1.1.1.1; exec bash\\""', shell=True)
 
     # Alias of ping -spw
-    def do_pingt(self, args):
+    def do_spawnping(self, args):
         if OPERATING_SYSTEM == "Windows":
             subprocess.run(["start", "cmd", "/K", "ping", "-t", str(args)], shell=True)
         else:
             pass
-    categorize((do_pub, do_ip, do_mac, do_pingt, do_sping, do_tcpRTT, do_wifistat, do_nslookup, do_portlist, do_ipcheck, do_ping), "Network")
+
+    # Dividing commands in categories (help command)
+    categorize((do_pub, do_iplist, do_macvendor, do_spawnping, do_sping, do_tcpRTT, do_wifistat, do_nslookup, do_portlist, do_ipcheck, do_ping), "Network")
     categorize((do_binary, do_decimal, do_sub), "Calc")
     categorize((do_putty), "SSH")
     categorize((do_time), "Miscellanea")
+
 if __name__ == '__main__':
     import sys
     c = SwissKnife()
