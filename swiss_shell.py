@@ -8,9 +8,6 @@ import platform
 import csv
 import calendar
 import psutil
-from scapy.all import sr1
-from scapy.all import IP
-from scapy.all import ICMP
 from pythonping import ping
 from datetime import datetime
 from rich.console import Console
