@@ -1,11 +1,13 @@
 #!/usr/bin/env python
 import cmd2
+from cmd2  import categorize
 import subprocess
 import re
 import requests
 import platform
 import csv
 import calendar
+import psutil
 from scapy.all import sr1
 from scapy.all import IP
 from scapy.all import ICMP
@@ -57,8 +59,11 @@ class SwissKnife(cmd2.Cmd):
         print(nslookup_cmd.stdout.decode('utf-8', 'ignore'))
 
     # subnet printer from decimal value
-    def do_sub(self, args, help='sub [integer between 0 and 32]'):
-        mask = int(args)
+    sub_parser = cmd2.Cmd2ArgumentParser()
+    sub_parser.add_argument(dest='value', type=int, help='From integer to subnet')
+    @cmd2.with_argparser(sub_parser)
+    def do_sub(self, args):
+        mask = int(args.value)
         if mask > 32 or mask < 0:
             pass
         else:
@@ -68,15 +73,14 @@ class SwissKnife(cmd2.Cmd):
             second_oct = int(bin_train[8:16],2)
             third_oct = int(bin_train[16:24],2)
             fourth_oct = int(bin_train[24:32],2)
-
             print ("%s.%s.%s.%s" % (first_oct, second_oct, third_oct, fourth_oct))
 
     # ipaddress — IPv4/IPv6 manipulation library
-    ipadd_parser = cmd2.Cmd2ArgumentParser()
-    ipadd_parser.add_argument('-c', '--check', dest='ipadd', type=str, nargs='?', help='Apply is_multicast, is_private ecc')
-    @cmd2.with_argparser(ipadd_parser)
-    def do_ipadd(ipadd, args):
-        only_ip = re.findall(IP_REGEX, args.ipadd)
+    ipcheck_parser = cmd2.Cmd2ArgumentParser()
+    ipcheck_parser.add_argument(dest='ipcheck', type=str, nargs='?', help='Apply is_multicast, is_private ecc')
+    @cmd2.with_argparser(ipcheck_parser)
+    def do_ipcheck(ipcheck, args):
+        only_ip = re.findall(IP_REGEX, args.ipcheck)
         print(only_ip[0])
         print("is_private: %s\nis_multicast: %s\nis_reserved: %s" %
             (ipaddress.ip_address(only_ip[0]).is_private,
@@ -84,7 +88,7 @@ class SwissKnife(cmd2.Cmd):
             ipaddress.ip_address(only_ip[0]).is_reserved
             )
         )
-        print(list(ip_network(args.ipadd).hosts()))
+        print(list(ip_network(args.ipcheck).hosts()))
 
     # Putty automation: the command putty will open by default a ssh connection with admin and port 22, telnet is optional
     putty_parser = cmd2.Cmd2ArgumentParser()
@@ -164,7 +168,22 @@ class SwissKnife(cmd2.Cmd):
     ip_parser = cmd2.Cmd2ArgumentParser()
     @cmd2.with_argparser(ip_parser)
     def do_ip(self, args):
-        swiss_func.list_interfaces()
+        # Ciclio il dictionary psutil.net_if_addrs()
+        for nic, addrs in psutil.net_if_addrs().items():
+            # Per ogni interfaccia presente IP_INTERFACES_INCLUDE 
+            for i in IP_INTERFACES_INCLUDE:
+                if nic == i:
+                    print(nic + ": ", end=' ')
+                    for addr in addrs:
+                        # Escludere IPv6, da migliorare
+                        if 'fe80' in addr.address:
+                            pass
+                        else:
+                            print(addr.address, end=' ')
+                        if addr.netmask:
+                            print(addr.netmask)     
+                else:
+                    pass
 
     # Show wifi statistics from netsh
     def do_wifistat(self, args):
@@ -263,7 +282,10 @@ class SwissKnife(cmd2.Cmd):
             subprocess.run(["start", "cmd", "/K", "ping", "-t", str(args)], shell=True)
         else:
             pass
-
+    categorize((do_pub, do_ip, do_mac, do_pingt, do_sping, do_tcpRTT, do_wifistat, do_nslookup, do_portlist, do_ipcheck, do_ping), "Network")
+    categorize((do_binary, do_decimal, do_sub), "Calc")
+    categorize((do_putty), "SSH")
+    categorize((do_time), "Miscellanea")
 if __name__ == '__main__':
     import sys
     c = SwissKnife()

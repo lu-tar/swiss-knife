@@ -1,9 +1,14 @@
 import requests
 import platform
-# File di configurazione per swiss_func ignorato da .gitignore
+# Configuration file for swiss_func
 OPERATING_SYSTEM = platform.system()
 CLOCK_FORMAT = "%H:%M:%S"
-# True or false for inial banner
+# IP, local interfaces, public ip and default route
+IP_INTERFACES_IGNORE = ["lo"]
+IP_INTERFACES_INCLUDE = ["Ethernet", "Ethernet 2"]
+INTERNET_IP = str(requests.get("https://api.ipify.org?format=text").text)
+LIST_ROUTE = True
+# Banner stuff
 IP_BANNER = True
 ASCII_BANNER = True
 ASCII_ART = """
@@ -13,7 +18,6 @@ ASCII_ART = """
         ]8I     88`'Yba,
    'taYbbdP'    88   `Y8a  v1.0
 """
-IP_INTERFACES_IGNORE = ["lo"]
-IP_INTERFACES_INCLUDE = ["Ethernet", "Ethernet 2"]
-INTERNET_IP = str(requests.get("https://api.ipify.org?format=text").text)
-LIST_ROUTE = True
+# Paths to files or programs
+PATH_TO_PUTTY = "C:\Program Files\PuTTY\putty.exe"
+PATH_TO_PORTS_CSV = "csv/service-names-port-numbers.csv"

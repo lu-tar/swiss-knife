@@ -1,17 +1,16 @@
-# Custom configuration
 from swiss_conf import *
 import psutil
 import subprocess
 
 def list_interfaces():
     if IP_BANNER == True:
-        print(INTERNET_IP)
+        print("Public IP: " + INTERNET_IP)
         # Ciclio il dictionary psutil.net_if_addrs()
         for nic, addrs in psutil.net_if_addrs().items():
             # Per ogni interfaccia presente IP_INTERFACES_INCLUDE 
             for i in IP_INTERFACES_INCLUDE:
                 if nic == i:
-                    print(nic, end=' ')
+                    print(nic + ": ", end=' ')
                     for addr in addrs:
                         # Escludere IPv6, da migliorare
                         if 'fe80' in addr.address:
@@ -33,7 +32,7 @@ def list_routes():
             decode_route_print = route_print.stdout.decode('utf-8', 'ignore').splitlines()
             for i in decode_route_print:
                 if '0.0.0.0' in i:
-                    print(i)
+                    print("Default route: " + i)
         elif OPERATING_SYSTEM == "Linux":
             route_print = subprocess.run(['ip', 'route'], stdout=subprocess.PIPE)
             decode_route_print = route_print.stdout.decode('utf-8', 'ignore').splitlines()
