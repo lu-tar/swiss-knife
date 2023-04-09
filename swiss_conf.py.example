@@ -1,7 +1,19 @@
 import requests
+import platform
 # File di configurazione per swiss_func ignorato da .gitignore
+OPERATING_SYSTEM = platform.system()
 CLOCK_FORMAT = "%H:%M:%S"
 # True or false for inial banner
-BANNER = True
+IP_BANNER = True
+ASCII_BANNER = True
+ASCII_ART = """
+    ,adPPYba,   88   ,d8
+    I8[         88 ,a8'
+    `Y8ba,      8888[
+        ]8I     88`'Yba,
+   'taYbbdP'    88   `Y8a  v1.0
+"""
 IP_INTERFACES_IGNORE = ["lo"]
+IP_INTERFACES_INCLUDE = ["Ethernet", "Ethernet 2"]
 INTERNET_IP = str(requests.get("https://api.ipify.org?format=text").text)
+LIST_ROUTE = True

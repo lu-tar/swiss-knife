@@ -27,14 +27,15 @@ CURRENT_TIME = datetime.now()
 CLOCK_TIME = CURRENT_TIME.strftime(CLOCK_FORMAT)
 IP_REGEX = "\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3}"
 
-# Pre cmd-loop interface info interrogation using netsh windows command
-# checks OPERATING_SYSTEM to skips netsh commands and BANNER variable
-# using api.ipify.org to pull the public ip address
-swiss_func.interfaces_banner()
+# Pre cmd-loop
+# Banner ascii
 swiss_func.show_motd()
-#
-# CMD LOOP APP
-#
+# IP list using psutils
+swiss_func.list_interfaces()
+# Subprocess the shell command like route print or ip route
+swiss_func.list_routes()
+
+# Cmd loop app
 class SwissKnife(cmd2.Cmd):
     prompt = "# "
     intro = ''
@@ -95,11 +96,11 @@ class SwissKnife(cmd2.Cmd):
     @cmd2.with_argparser(putty_parser)
     def do_putty(self, args):
         if args.telnet == True:
-            subprocess.Popen(["C:\Program Files\PuTTY\putty.exe", "-telnet", args.host], stdout=subprocess.PIPE)
+            subprocess.Popen([PATH_TO_PUTTY, "-telnet", args.host], stdout=subprocess.PIPE)
         elif args.password == None:
-            subprocess.Popen(["C:\Program Files\PuTTY\putty.exe", "-ssh", args.host, "-l", args.username, "-P", args.port], stdout=subprocess.PIPE)
+            subprocess.Popen([PATH_TO_PUTTY, "-ssh", args.host, "-l", args.username, "-P", args.port], stdout=subprocess.PIPE)
         else:
-            subprocess.Popen(["C:\Program Files\PuTTY\putty.exe", "-ssh", args.host, "-l", args.username, "-pw", args.password, "-P", args.port], stdout=subprocess.PIPE)
+            subprocess.Popen([PATH_TO_PUTTY, "-ssh", args.host, "-l", args.username, "-pw", args.password, "-P", args.port], stdout=subprocess.PIPE)
 
     # Binary to decimal conversion
     decimal_parser = cmd2.Cmd2ArgumentParser()
@@ -127,7 +128,7 @@ class SwissKnife(cmd2.Cmd):
     portlist_parser.add_argument(dest='value', help='Port or protocol')
     @cmd2.with_argparser(portlist_parser)
     def do_portlist(self, args):
-        with open('csv/service-names-port-numbers.csv', 'r') as file:
+        with open(PATH_TO_PORTS_CSV, 'r') as file:
             reader = csv.reader(file, delimiter=",")
             # isinstance e' meglio di type
             if isinstance(args.value,str):
@@ -163,7 +164,7 @@ class SwissKnife(cmd2.Cmd):
     ip_parser = cmd2.Cmd2ArgumentParser()
     @cmd2.with_argparser(ip_parser)
     def do_ip(self, args):
-        swiss_func.interfaces_banner()
+        swiss_func.list_interfaces()
 
     # Show wifi statistics from netsh
     def do_wifistat(self, args):
