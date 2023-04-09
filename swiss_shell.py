@@ -238,20 +238,6 @@ class SwissKnife(cmd2.Cmd):
         else:
             print(INTERNET_IP)
 
-    # Ping using scapy lib
-    sping_parser = cmd2.Cmd2ArgumentParser()
-    sping_parser.add_argument(dest='sping_ip',type=str, help='IP Address')
-    sping_parser.add_argument('-r', '--repeat', type=int, default=3, nargs='?', help='output [n] times')
-    @cmd2.with_argparser(sping_parser)
-    def do_sping(self, args):
-        for i in range(0,args.repeat):
-            icmp = IP(dst=args.sping_ip)/ICMP()
-            resp = sr1(icmp,timeout=2,verbose=False)
-            if resp == None:
-                print("Unreachable")
-            else:
-                print("OK!")
-
     # Ping using pythonping + if spw argument is specified the script try to open a shell pinging (NOT WORKING NEEDS ATTENTION)
     # Using uname_output we can check if we are in a Linux o Win machine
     ping_parser = cmd2.Cmd2ArgumentParser()
@@ -291,7 +277,7 @@ class SwissKnife(cmd2.Cmd):
             pass
 
     # Dividing commands in categories (help command)
-    categorize((do_pub, do_iplist, do_macvendor, do_spawnping, do_sping, do_tcpRTT, do_wifistat, do_nslookup, do_portlist, do_ipcheck, do_ping), "Network")
+    categorize((do_pub, do_iplist, do_macvendor, do_spawnping, do_tcpRTT, do_wifistat, do_nslookup, do_portlist, do_ipcheck, do_ping), "Network")
     categorize((do_binary, do_decimal, do_sub), "Calc")
     categorize((do_putty), "SSH")
     categorize((do_time), "Miscellanea")
