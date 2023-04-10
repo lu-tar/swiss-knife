@@ -4,7 +4,7 @@ A multipurpose shell for networking tasks written in Python cmd2.
 **Spring '23 to-do list**
 
 🛠️ Fix 🛠️
-- ipconfig calls with agnostic library like [psutil](https://pypi.org/project/psutil/)
+✔️ ipconfig calls with agnostic library like [psutil](https://pypi.org/project/psutil/)
 
 🚀 High priority 🚀
 - Change local ip address from static to dynamic

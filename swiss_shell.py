@@ -7,7 +7,6 @@ import requests
 import platform
 import csv
 import calendar
-import psutil
 from pythonping import ping
 from datetime import datetime
 from rich.console import Console
@@ -30,7 +29,10 @@ IP_REGEX = "\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3}"
 # Banner ascii
 swiss_func.show_motd()
 # IP list using psutils
-swiss_func.list_interfaces()
+if IP_BANNER == True:
+    swiss_func.list_interfaces()
+else:
+    pass
 # Subprocess the shell command like route print or ip route
 swiss_func.list_routes()
 
@@ -164,23 +166,8 @@ class SwissKnife(cmd2.Cmd):
     # verbose and wifi with args
     iplist_parser = cmd2.Cmd2ArgumentParser()
     @cmd2.with_argparser(iplist_parser)
-    def do_iplist(self, _):
-        # Ciclio il dictionary psutil.net_if_addrs()
-        for nic, addrs in psutil.net_if_addrs().items():
-            # Per ogni interfaccia presente IP_INTERFACES_INCLUDE 
-            for i in IP_INTERFACES_INCLUDE:
-                if nic == i:
-                    print(nic + ": ", end=' ')
-                    for addr in addrs:
-                        # Escludere IPv6, da migliorare
-                        if 'fe80' in addr.address:
-                            pass
-                        else:
-                            print(addr.address, end=' ')
-                        if addr.netmask:
-                            print(addr.netmask)     
-                else:
-                    pass
+    def do_iplist(self, _): 
+        swiss_func.list_interfaces()
 
     # Show wifi statistics from netsh
     def do_wifistat(self, args):
@@ -272,6 +259,16 @@ class SwissKnife(cmd2.Cmd):
             subprocess.run(["start", "cmd", "/K", "ping", "-t", str(args)], shell=True)
         else:
             pass
+    
+    # Change ip on Windows with command line
+    def do_changeip(self, args):
+        if OPERATING_SYSTEM == "Windows":
+            ipv4 = input("IP address: ")
+            subnet = input("Subnet mask: ")
+            gateway = input("Gateway: ")
+            subprocess.run(["netsh", "interface", "ipv4", "set", "name=" + str(args), "static"], shell=True)
+            
+
 
     # Dividing commands in categories (help command)
     categorize((do_pub, do_iplist, do_macvendor, do_spawnping, do_tcpRTT, do_wifistat, do_nslookup, do_portlist, do_ipcheck, do_ping), "Network")

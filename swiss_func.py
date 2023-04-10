@@ -3,26 +3,23 @@ import psutil
 import subprocess
 
 def list_interfaces():
-    if IP_BANNER == True:
-        print("Public IP: " + INTERNET_IP)
-        # Ciclio il dictionary psutil.net_if_addrs()
-        for nic, addrs in psutil.net_if_addrs().items():
-            # Per ogni interfaccia presente IP_INTERFACES_INCLUDE 
-            for i in IP_INTERFACES_INCLUDE:
-                if nic == i:
-                    print(nic + ": ", end=' ')
-                    for addr in addrs:
-                        # Escludere IPv6, da migliorare
-                        if 'fe80' in addr.address:
-                            pass
-                        else:
-                            print(addr.address, end=' ')
-                        if addr.netmask:
-                            print(addr.netmask)     
-                else:
-                    pass
-    else:
-        pass
+    print("Public IP: " + INTERNET_IP)
+    # Ciclio il dictionary psutil.net_if_addrs()
+    for nic, addrs in psutil.net_if_addrs().items():
+        # Per ogni interfaccia presente IP_INTERFACES_INCLUDE 
+        for i in IP_INTERFACES_INCLUDE:
+            if nic == i:
+                print(nic + ": ", end=' ')
+                for addr in addrs:
+                    # Escludere IPv6, da migliorare
+                    if 'fe80' in addr.address:
+                        pass
+                    else:
+                        print(addr.address, end=' ')
+                    if addr.netmask:
+                        print(addr.netmask)     
+            else:
+                pass
     return
 
 def list_routes():
