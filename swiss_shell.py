@@ -261,14 +261,23 @@ class SwissKnife(cmd2.Cmd):
             pass
     
     # Change ip on Windows with command line
+    changeip_parser = cmd2.Cmd2ArgumentParser()
+    changeip_parser.add_argument('-dhcp', '--dhcp', default=False, action="store_true", help="Change ip to static/dynamic using netsh")
     def do_changeip(self, args):
         if OPERATING_SYSTEM == "Windows":
-            ipv4 = input("IP address: ")
-            subnet = input("Subnet mask: ")
-            gateway = input("Gateway: ")
-            subprocess.run(["netsh", "interface", "ipv4", "set", "name=" + str(args), "static"], shell=True)
-            
-
+            if args.dhcp == False:
+                # Collect
+                input_ipv4 = input("IP address: ")
+                input_subnet = input("Subnet mask: ")
+                input_gateway = input("Gateway: ")
+                subprocess.run(["netsh", "interface", "ipv4", "set", "address", "name=" + str(args), "static", input_ipv4, input_subnet, input_gateway], shell=True)
+                # Doublecheck interfaces
+                swiss_func.list_interfaces()
+            else:
+                # -dhcp is True then set the interface name to dhcp
+                subprocess.run(["netsh", "interface", "ipv4", "set", "address", "name=" + str(args), "source", "dhcp"], shell=True)
+                # Doublecheck interfaces
+                swiss_func.list_interfaces()
 
     # Dividing commands in categories (help command)
     categorize((do_pub, do_iplist, do_macvendor, do_spawnping, do_tcpRTT, do_wifistat, do_nslookup, do_portlist, do_ipcheck, do_ping), "Network")
