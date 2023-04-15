@@ -7,6 +7,7 @@ import requests
 import platform
 import csv
 import calendar
+import pathlib
 from pythonping import ping
 from datetime import datetime
 from rich.console import Console
@@ -253,12 +254,14 @@ class SwissKnife(cmd2.Cmd):
                 #   file.write(args.address + "\n" + args.repeat)
                 subprocess.Popen('x-terminal-emulator -e "bash -c \\"ping 1.1.1.1; exec bash\\""', shell=True)
 
-    # Alias of ping -spw
-    def do_spawnping(self, args):
-        if OPERATING_SYSTEM == "Windows":
-            subprocess.run(["start", "cmd", "/K", "ping", "-t", str(args)], shell=True)
-        else:
-            pass
+    # Opening a list of programs
+    openapps_parser = cmd2.Cmd2ArgumentParser()
+    @cmd2.with_argparser(openapps_parser)
+    def do_openapps(self, _):
+        for i in APP_LIST:
+            print("Opening " + str(i))
+            subprocess.call(i)
+
     
     # Change ip on Windows with command line
     changeip_parser = cmd2.Cmd2ArgumentParser()
@@ -281,10 +284,10 @@ class SwissKnife(cmd2.Cmd):
             print("")
 
     # Dividing commands in categories (help command)
-    categorize((do_pub, do_iplist, do_macvendor, do_spawnping, do_tcpRTT, do_wifistat, do_nslookup, do_portlist, do_ipcheck, do_ping, do_changeip), "Network")
+    categorize((do_pub, do_iplist, do_macvendor, do_tcpRTT, do_wifistat, do_nslookup, do_portlist, do_ipcheck, do_ping, do_changeip), "Network")
     categorize((do_binary, do_decimal, do_sub), "Calc")
     categorize((do_putty), "SSH")
-    categorize((do_time), "Miscellanea")
+    categorize((do_time, do_openapps), "Miscellanea")
 
 if __name__ == '__main__':
     import sys
