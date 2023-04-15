@@ -37,7 +37,7 @@ def list_routes():
                 if 'default' in i:
                     print(i)
         else:
-            pass
+            print("platform.system() is not Windows or Linux")
     else:
         pass
 

@@ -94,7 +94,7 @@ class SwissKnife(cmd2.Cmd):
     putty_parser.add_argument(dest='host', type=str)
     putty_parser.add_argument('-p', '--port', type=str, default="22", nargs='?', help='Destination port')
     putty_parser.add_argument('-l', '--username', type=str, default="admin", nargs='?', help='Username')
-    putty_parser.add_argument('-pw', '--password', type=str, nargs='?', help='Measure_putty timeout')
+    putty_parser.add_argument('-pw', '--password', type=str, nargs='?', help='SSH password')
     putty_parser.add_argument('-t', '--telnet', default=False, action='store_true', help='telnet session')
     @cmd2.with_argparser(putty_parser)
     def do_putty(self, args):
@@ -262,25 +262,26 @@ class SwissKnife(cmd2.Cmd):
     
     # Change ip on Windows with command line
     changeip_parser = cmd2.Cmd2ArgumentParser()
+    changeip_parser.add_argument(dest='interface_name',type=str, help='Interface name like "Ethernet"')
     changeip_parser.add_argument('-dhcp', '--dhcp', default=False, action="store_true", help="Change ip to static/dynamic using netsh")
+    @cmd2.with_argparser(changeip_parser)
     def do_changeip(self, args):
         if OPERATING_SYSTEM == "Windows":
             if args.dhcp == False:
                 # Collect
+                print("Working on interface: " + args.interface_name)
                 input_ipv4 = input("IP address: ")
                 input_subnet = input("Subnet mask: ")
                 input_gateway = input("Gateway: ")
-                subprocess.run(["netsh", "interface", "ipv4", "set", "address", "name=" + str(args), "static", input_ipv4, input_subnet, input_gateway], shell=True)
-                # Doublecheck interfaces
-                swiss_func.list_interfaces()
+                subprocess.run(["netsh", "interface", "ipv4", "set", "address", "name=" + args.interface_name, "static", input_ipv4, input_subnet, input_gateway], shell=True)
             else:
-                # -dhcp is True then set the interface name to dhcp
-                subprocess.run(["netsh", "interface", "ipv4", "set", "address", "name=" + str(args), "source", "dhcp"], shell=True)
-                # Doublecheck interfaces
-                swiss_func.list_interfaces()
+                # -dhcp is True then set the interface to dhcp
+                subprocess.run(["netsh", "interface", "ipv4", "set", "address", "name=" + args.interface_name, "source=dhcp"], shell=True)
+        else:
+            print("")
 
     # Dividing commands in categories (help command)
-    categorize((do_pub, do_iplist, do_macvendor, do_spawnping, do_tcpRTT, do_wifistat, do_nslookup, do_portlist, do_ipcheck, do_ping), "Network")
+    categorize((do_pub, do_iplist, do_macvendor, do_spawnping, do_tcpRTT, do_wifistat, do_nslookup, do_portlist, do_ipcheck, do_ping, do_changeip), "Network")
     categorize((do_binary, do_decimal, do_sub), "Calc")
     categorize((do_putty), "SSH")
     categorize((do_time), "Miscellanea")
