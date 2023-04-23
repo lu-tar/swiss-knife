@@ -10,6 +10,7 @@ A multipurpose shell for networking tasks written in Python cmd2.
 ✔️ Change local ip address from static to dynamic
 - SSH automation + template
 ✔️ General Windows app automation maybe with os calls or PyAutogui or Selenium
+- [Nornir](https://nornir.readthedocs.io/en/latest/index.html) integration
 - Search a file for a list of keyword like an automated grep + colored output
   - Debug files from Aruba / Cisco wireless
   - Aruba / Cisco tech-support file
