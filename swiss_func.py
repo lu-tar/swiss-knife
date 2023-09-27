@@ -17,7 +17,7 @@ def list_interfaces():
                     else:
                         print(addr.address, end=' ')
                     if addr.netmask:
-                        print(addr.netmask)     
+                        print(addr.netmask)
             else:
                 pass
     return

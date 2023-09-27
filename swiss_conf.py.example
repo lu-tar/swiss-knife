@@ -16,7 +16,7 @@ ASCII_ART = """
     I8[         88 ,a8'
     `Y8ba,      8888[
         ]8I     88`'Yba,
-   'taYbbdP'    88   `Y8a  v1.0
+   'taYbbdP'    88   `Y8a  - Swiss Knife v1.0
 """
 # Paths to files or programs
 PATH_TO_PUTTY = "C:\Program Files\PuTTY\putty.exe"
