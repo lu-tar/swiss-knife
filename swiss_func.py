@@ -47,3 +47,11 @@ def show_motd():
     else:
         pass
     return
+
+def debug_parser():
+
+    return
+
+# Testing debug file parsing, see the pseudocodice in note.md
+
+debug_parser()

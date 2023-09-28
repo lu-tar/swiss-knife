@@ -6,11 +6,13 @@ Association received
 ```
 2023/09/19 15:49:46.962897741 {wncd_x_R0-0}{1}: [client-orch-sm] [17435]: (note): MAC: 845f.04e7.d557  Association received. BSSID 1484.7340.a8cd, WLAN MOBILE, Slot 1 AP 1484.7340.a8c0, mon-0b-ap-164
 ```
-Association success
+Association and re-association success
 ```
 2023/09/19 15:49:46.963505395 {wncd_x_R0-0}{1}: [dot11] [17435]: (note): MAC: 845f.04e7.d557  Association success. AID 6, Roaming = False, WGB = False, 11r = False, 11w = True Fast roam = False
+
+2023/09/19 15:57:23.471484913 {wncd_x_R0-0}{1}: [client-orch-sm] [17435]: (note): MAC: 845f.04e7.d557  Re-Association received. BSSID 1484.7340.ec6d, WLAN MOBILE, Slot 1 AP 1484.7340.ec60, mon-1b-ap-172, old BSSID 1484.7340.a8cd
 ```
-client-keymgmt
+client-keymgmt success and failure
 ```
 2023/09/19 15:49:46.971657310 {wncd_x_R0-0}{1}: [client-keymgmt] [17435]: (info): MAC: 845f.04e7.d557  EAP key M1 Sent successfully
 2023/09/19 15:49:46.971665274 {wncd_x_R0-0}{1}: [client-keymgmt] [17435]: (info): MAC: 845f.04e7.d557  Client key-mgmt state transition: S_INITPMK -> S_PTK_START
@@ -21,6 +23,21 @@ client-keymgmt
 2023/09/19 15:49:46.986368190 {wncd_x_R0-0}{1}: [client-keymgmt] [17435]: (info): MAC: 845f.04e7.d557  M4 Status: EAP key M4 validation is successful
 2023/09/19 15:49:46.986370726 {wncd_x_R0-0}{1}: [client-keymgmt] [17435]: (note): MAC: 845f.04e7.d557  EAP Key management successful. AKM:SAE Cipher:CCMP WPA Version: WPA3
 2023/09/19 15:49:46.986392260 {wncd_x_R0-0}{1}: [client-keymgmt] [17435]: (info): MAC: 845f.04e7.d557  Client key-mgmt state transition: S_PTKINITNEGOTIATING -> S_PTKINITDONE
+
+2023/02/27 14:42:03.151081 {wncd_x_R0-0}{1}: [client-keymgmt] [16602]: (info): MAC: c81c.fe19.f2e5  EAP key M1 Sent successfully
+2023/02/27 14:42:03.151085 {wncd_x_R0-0}{1}: [client-keymgmt] [16602]: (info): MAC: c81c.fe19.f2e5  Client key-mgmt state transition: S_PTKINITDONE -> S_PTK_START
+2023/02/27 14:42:03.171795 {wncd_x_R0-0}{1}: [client-keymgmt] [16602]: (info): MAC: c81c.fe19.f2e5   M2 Status: EAP key M2 validation success
+2023/02/27 14:42:03.171889 {wncd_x_R0-0}{1}: [client-keymgmt] [16602]: (info): MAC: c81c.fe19.f2e5  EAP key M3 Sent successfully
+2023/02/27 14:42:03.171891 {wncd_x_R0-0}{1}: [client-keymgmt] [16602]: (info): MAC: c81c.fe19.f2e5  Client key-mgmt state transition: S_PTK_START -> S_PTKINITNEGOTIATING
+2023/02/27 14:42:04.171522 {wncd_x_R0-0}{1}: [client-keymgmt] [16602]: (info): MAC: c81c.fe19.f2e5  Keymgmt: resend eapol key m3. Retrasmitting EAP key packet M3
+2023/02/27 14:42:04.171619 {wncd_x_R0-0}{1}: [client-keymgmt] [16602]: (info): MAC: c81c.fe19.f2e5  Client key-mgmt state transition: S_PTKINITNEGOTIATING -> S_PTKINITNEGOTIATING
+2023/02/27 14:42:04.324664 {wncd_x_R0-0}{1}: [client-keymgmt] [16602]: (ERR): MAC: c81c.fe19.f2e5  Keymgmt: Failed to validate eapol key m4. Received wrong replay counter. stop processing
+2023/02/27 14:42:04.324669 {wncd_x_R0-0}{1}: [client-keymgmt] [16602]: (info): MAC: c81c.fe19.f2e5  Client key-mgmt state transition: S_PTKINITNEGOTIATING -> S_PTKINITNEGOTIATING
+2023/02/27 14:42:05.171758 {wncd_x_R0-0}{1}: [client-keymgmt] [16602]: (info): MAC: c81c.fe19.f2e5  Keymgmt: resend eapol key m3. Retrasmitting EAP key packet M3
+2023/02/27 14:42:05.171863 {wncd_x_R0-0}{1}: [client-keymgmt] [16602]: (info): MAC: c81c.fe19.f2e5  Client key-mgmt state transition: S_PTKINITNEGOTIATING -> S_PTKINITNEGOTIATING
+2023/02/27 14:42:06.171706 {wncd_x_R0-0}{1}: [client-keymgmt] [16602]: (ERR): MAC: c81c.fe19.f2e5  Keymgmt: Failed to eapol key m3 retransmit failure. Max retries for M3 over
+2023/02/27 14:42:06.171720 {wncd_x_R0-0}{1}: [client-keymgmt] [16602]: (info): MAC: c81c.fe19.f2e5  Keymgmt: eapol key failure. Sending client key exchange failure to auth fsm,reason code: 89
+2023/02/27 14:42:06.171736 {wncd_x_R0-0}{1}: [client-keymgmt] [16602]: (info): MAC: c81c.fe19.f2e5  Client key-mgmt state transition: S_PTKINITNEGOTIATING -> S_KEYMGMT_CLIENT_DELETE
 ```
 client-iplearn
 ```
@@ -79,3 +96,28 @@ $ cat 'debugTrace_845f.04e7.d557(2).txt' | grep 'reason'
 2023/09/19 15:56:09.868174016 {wncd_x_R0-0}{1}: [client-orch-sm] [17435]: (info): MAC: 845f.04e7.d557  Deleting the client, reason: 185, CO_CLIENT_DELETE_REASON_SAE_AUTH_IN_ASSOCIATED_STATE, Client state S_CO_RUN
 2023/09/19 15:56:14.879357285 {wncd_x_R0-0}{1}: [client-orch-sm] [17435]: (info): MAC: 845f.04e7.d557  Deleting the client, reason: 185, CO_CLIENT_DELETE_REASON_SAE_AUTH_IN_ASSOCIATED_STATE, Client state S_CO_RUN
 ```
+
+## Pseudocodice
+- Devo rendere il file cronologico splittandolo come un csv (Pandas?)
+
+```
+2023/02/27 14:41:15.703540 {wncd_x_R0-0}{1}: [client-keymgmt] [16602]: (info): MAC: c81c.fe19.f2e5  EAP key M1 Sent successfully
+```
+
+Diventa
+
+```csv
+2023/02/27,14:41:15.703540,{wncd_x_R0-0}{1}: [client-keymgmt] [16602]: (info): MAC: c81c.fe19.f2e5  EAP key M1 Sent successfully
+```
+Date: `2023/02/27`
+Time: `14:41:15.703540`
+Wncd: `{wncd_x_R0-0}{1}:`
+Category: `[client-keymgmt]`
+UnknownID: `[16602]:`
+Severity: `(info):`
+MAC: `MAC: c81c.fe19.f2e5`
+Message: `EAP key M1 Sent successfully`
+
+- Apro il file e lo divido per mac-address con una regex (esempio 2 mac-address)
+- Di quei 2 file, uno per mac address, lo suddivido per associazioni e riassociazioni
+- All'interno dei blocco-associazione filtro i dati che mi servono
