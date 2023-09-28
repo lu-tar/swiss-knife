@@ -120,4 +120,4 @@ Message: `EAP key M1 Sent successfully`
 
 - Apro il file e lo divido per mac-address con una regex (esempio 2 mac-address)
 - Di quei 2 file, uno per mac address, lo suddivido per associazioni e riassociazioni
-- All'interno dei blocco-associazione filtro i dati che mi servono
+- All'interno dei blocco-associazione filtro i dati
