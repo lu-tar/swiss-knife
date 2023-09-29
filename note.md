@@ -111,7 +111,7 @@ Diventa
 ```
 Date: `2023/02/27`
 Time: `14:41:15.703540`
-Wncd: `{wncd_x_R0-0}{1}:`
+Daemon: `{wncd_x_R0-0}{1}:`
 Category: `[client-keymgmt]`
 UnknownID: `[16602]:`
 Severity: `(info):`
@@ -119,5 +119,11 @@ MAC: `MAC: c81c.fe19.f2e5`
 Message: `EAP key M1 Sent successfully`
 
 - Apro il file e lo divido per mac-address con una regex (esempio 2 mac-address)
-- Di quei 2 file, uno per mac address, lo suddivido per associazioni e riassociazioni
-- All'interno dei blocco-associazione filtro i dati
+- Di quei 2 file, uno per mac address, lo suddivido per associazioni e riassociazioni (non necessario su 9800)
+- All'interno dei blocchi-associazione filtro i dati
+
+Risultato prima versione
+
+```python
+[7, '2023/09/19', '15:49:46.963798763', '{wncd_x_R0-0}{1}:', '[auth-mgr] [17435]:', 'info', ' [845f.04e7.d557:capwap_900000a1] Session Start event called from SANET-SHIM, vlan: 0']
+```

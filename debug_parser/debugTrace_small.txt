@@ -1,0 +1,8 @@
+2023/09/19 15:49:46.963379668 {wncd_x_R0-0}{1}: [dot11] [17435]: (debug): MAC: 845f.04e7.d557  Dot11 Capability info byte1 11, byte2: 11 SUCCESS
+2023/09/19 15:49:46.963505395 {wncd_x_R0-0}{1}: [dot11] [17435]: (note): MAC: 845f.04e7.d557  Association success. AID 6, Roaming = False, WGB = False, 11r = False, 11w = True Fast roam = False
+2023/09/19 15:49:46.963525965 {wncd_x_R0-0}{1}: [dot11] [17435]: (info): MAC: 845f.04e7.d557  DOT11 state transition: S_DOT11_INIT -> S_DOT11_ASSOCIATED
+2023/09/19 15:49:46.963582556 {wncd_x_R0-0}{1}: [client-orch-sm] [17435]: (debug): MAC: 845f.04e7.d557  Station Dot11 association is successful.
+2023/09/19 15:49:46.963616686 {wncd_x_R0-0}{1}: [client-orch-sm] [17435]: (debug): MAC: 845f.04e7.d557  Starting L2 authentication. Bssid in state machine:1484.7340.a8cd  Bssid in request is:1484.7340.a8cd
+2023/09/19 15:49:46.963648566 {wncd_x_R0-0}{1}: [client-orch-state] [17435]: (note): MAC: 845f.04e7.d557  Client state transition: S_CO_ASSOCIATING -> S_CO_L2_AUTH_IN_PROGRESS
+2023/09/19 15:49:46.963678764 {wncd_x_R0-0}{1}: [client-auth] [17435]: (note): MAC: 845f.04e7.d557  L2 Authentication initiated. method PSK, Policy VLAN 15, AAA override = 0, NAC = 0
+2023/09/19 15:49:46.963798763 {wncd_x_R0-0}{1}: [auth-mgr] [17435]: (info): [845f.04e7.d557:capwap_900000a1] Session Start event called from SANET-SHIM, vlan: 0

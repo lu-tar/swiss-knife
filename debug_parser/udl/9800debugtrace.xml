@@ -1,0 +1,64 @@
+<NotepadPlus>
+    <UserLang name="9800debugtrace" ext="" udlVersion="2.1">
+        <Settings>
+            <Global caseIgnored="yes" allowFoldOfComments="no" foldCompact="no" forcePureLC="0" decimalSeparator="0" />
+            <Prefix Keywords1="no" Keywords2="no" Keywords3="no" Keywords4="no" Keywords5="no" Keywords6="no" Keywords7="no" Keywords8="no" />
+        </Settings>
+        <KeywordLists>
+            <Keywords name="Comments"></Keywords>
+            <Keywords name="Numbers, prefix1"></Keywords>
+            <Keywords name="Numbers, prefix2"></Keywords>
+            <Keywords name="Numbers, extras1"></Keywords>
+            <Keywords name="Numbers, extras2"></Keywords>
+            <Keywords name="Numbers, suffix1"></Keywords>
+            <Keywords name="Numbers, suffix2"></Keywords>
+            <Keywords name="Numbers, range"></Keywords>
+            <Keywords name="Operators1"></Keywords>
+            <Keywords name="Operators2"></Keywords>
+            <Keywords name="Folders in code1, open"></Keywords>
+            <Keywords name="Folders in code1, middle"></Keywords>
+            <Keywords name="Folders in code1, close"></Keywords>
+            <Keywords name="Folders in code2, open"></Keywords>
+            <Keywords name="Folders in code2, middle"></Keywords>
+            <Keywords name="Folders in code2, close"></Keywords>
+            <Keywords name="Folders in comment, open"></Keywords>
+            <Keywords name="Folders in comment, middle"></Keywords>
+            <Keywords name="Folders in comment, close"></Keywords>
+            <Keywords name="Keywords1">[client-keymgmt]&#x000D;&#x000A;EAP key&#x000D;&#x000A;EAP&#x000D;&#x000A;M1&#x000D;&#x000A;M2&#x000D;&#x000A;M3&#x000D;&#x000A;M4&#x000D;&#x000A;M5&#x000D;&#x000A;M6&#x000D;&#x000A;SAE&#x000D;&#x000A;[dot11]&#x000D;&#x000A;eapol&#x000D;&#x000A;S_PTK_START&#x000D;&#x000A;S_INITPMK&#x000D;&#x000A;S_PTKINITNEGOTIATING&#x000D;&#x000A;S_PTKINITDONE&#x000D;&#x000A;WPA2&#x000D;&#x000A;WPA3&#x000D;&#x000A;WPA&#x000D;&#x000A;cipher&#x000D;&#x000A;AKM&#x000D;&#x000A;S_AUTHIF_PSK_AUTH_KEY_XCHNG_PENDING&#x000D;&#x000A;S_AUTHIF_PSK_AUTH_DONE&#x000D;&#x000A;PSK,&#x000D;&#x000A;AKM:PSK&#x000D;&#x000A;S_CO_L2_AUTH_IN_PROGRESS&#x000D;&#x000A;S_AUTHIF_PSK_AUTH_PENDING&#x000D;&#x000A;Cipher:CCMP</Keywords>
+            <Keywords name="Keywords2">association&#x000D;&#x000A;Re-Association&#x000D;&#x000A;BSSID&#x000D;&#x000A;S_DOT11_ASSOCIATED&#x000D;&#x000A;S_DOT11_INIT&#x000D;&#x000A;DOT11_STATUS_SUCCESS&#x000D;&#x000A;S_CO_ASSOCIATING</Keywords>
+            <Keywords name="Keywords3">reason&#x000D;&#x000A;failure&#x000D;&#x000A;timeout&#x000D;&#x000A;S_CO_DELETED&#x000D;&#x000A;reason:&#x000D;&#x000A;(ERR):&#x000D;&#x000A;retries&#x000D;&#x000A;failure&#x000D;&#x000A;delete&#x000D;&#x000A;deauth&#x000D;&#x000A;CLIENT_DEAUTH_REASON_STA_NO_IP&#x000D;&#x000A;S_CO_DELETE_IN_PROGRESS&#x000D;&#x000A;S_IPLEARN_DELETE_IN_PROGRESS</Keywords>
+            <Keywords name="Keywords4">DHCP&#x000D;&#x000A;[client-iplearn]&#x000D;&#x000A;S_CO_IP_LEARN_IN_PROGRESS&#x000D;&#x000A;S_IPLEARN_IN_PROGRESS&#x000D;&#x000A;S_IPLEARN_INIT&#x000D;&#x000A;S_CO_DPATH_PLUMB_IN_PROGRESS&#x000D;&#x000A;DHCPv4&#x000D;&#x000A;IPLEARN_METHOD_IP_SNOOPING&#x000D;&#x000A;IP_LEARNING,&#x000D;&#x000A;S_IPLEARN_COMPLETE</Keywords>
+            <Keywords name="Keywords5">RUN&#x000D;&#x000A;run&#x000D;&#x000A;S_CO_RUN</Keywords>
+            <Keywords name="Keywords6">received.</Keywords>
+            <Keywords name="Keywords7"></Keywords>
+            <Keywords name="Keywords8"></Keywords>
+            <Keywords name="Delimiters"></Keywords>
+        </KeywordLists>
+        <Styles>
+            <WordsStyle name="DEFAULT" fgColor="000000" bgColor="FFFFFF" fontStyle="0" nesting="0" />
+            <WordsStyle name="COMMENTS" fgColor="000000" bgColor="FFFFFF" fontStyle="0" nesting="0" />
+            <WordsStyle name="LINE COMMENTS" fgColor="000000" bgColor="FFFFFF" fontStyle="0" nesting="0" />
+            <WordsStyle name="NUMBERS" fgColor="000000" bgColor="FFFFFF" fontStyle="0" nesting="0" />
+            <WordsStyle name="KEYWORDS1" fgColor="000000" bgColor="80FFFF" fontStyle="1" nesting="0" />
+            <WordsStyle name="KEYWORDS2" fgColor="000000" bgColor="1BCD66" fontStyle="1" nesting="0" />
+            <WordsStyle name="KEYWORDS3" fgColor="FFFF00" bgColor="FF0000" fontStyle="1" nesting="0" />
+            <WordsStyle name="KEYWORDS4" fgColor="8000FF" bgColor="FFFFFF" fontStyle="1" nesting="0" />
+            <WordsStyle name="KEYWORDS5" fgColor="000000" bgColor="FFFF00" fontStyle="7" nesting="0" />
+            <WordsStyle name="KEYWORDS6" fgColor="000000" bgColor="00FF40" fontStyle="7" nesting="0" />
+            <WordsStyle name="KEYWORDS7" fgColor="000000" bgColor="FFFFFF" fontStyle="0" nesting="0" />
+            <WordsStyle name="KEYWORDS8" fgColor="000000" bgColor="FFFFFF" fontStyle="0" nesting="0" />
+            <WordsStyle name="OPERATORS" fgColor="000000" bgColor="FFFFFF" fontStyle="0" nesting="0" />
+            <WordsStyle name="FOLDER IN CODE1" fgColor="000000" bgColor="FFFFFF" fontStyle="0" nesting="0" />
+            <WordsStyle name="FOLDER IN CODE2" fgColor="000000" bgColor="FFFFFF" fontStyle="0" nesting="0" />
+            <WordsStyle name="FOLDER IN COMMENT" fgColor="000000" bgColor="FFFFFF" fontStyle="0" nesting="0" />
+            <WordsStyle name="DELIMITERS1" fgColor="000000" bgColor="FFFFFF" fontStyle="0" nesting="0" />
+            <WordsStyle name="DELIMITERS2" fgColor="000000" bgColor="FFFFFF" fontStyle="0" nesting="0" />
+            <WordsStyle name="DELIMITERS3" fgColor="000000" bgColor="FFFFFF" fontStyle="0" nesting="0" />
+            <WordsStyle name="DELIMITERS4" fgColor="000000" bgColor="FFFFFF" fontStyle="0" nesting="0" />
+            <WordsStyle name="DELIMITERS5" fgColor="000000" bgColor="FFFFFF" fontStyle="0" nesting="0" />
+            <WordsStyle name="DELIMITERS6" fgColor="000000" bgColor="FFFFFF" fontStyle="0" nesting="0" />
+            <WordsStyle name="DELIMITERS7" fgColor="000000" bgColor="FFFFFF" fontStyle="0" nesting="0" />
+            <WordsStyle name="DELIMITERS8" fgColor="000000" bgColor="FFFFFF" fontStyle="0" nesting="0" />
+        </Styles>
+    </UserLang>
+</NotepadPlus>
