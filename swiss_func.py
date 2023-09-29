@@ -2,6 +2,12 @@ from swiss_conf import *
 import psutil
 import subprocess
 import re
+import sqlite3
+from datetime import datetime
+
+CLOCK_FORMAT = "%H%M%S"
+CURRENT_TIME = datetime.now()
+CLOCK_TIME = CURRENT_TIME.strftime(CLOCK_FORMAT)
 
 IOSXE_DATE_REGEX = '\d{4}/\d{2}/\d{2}'
 IOSXE_TIME_REGEX = '\d{2}:\d{2}:\d{2}\.\d+'
@@ -60,10 +66,9 @@ def show_motd():
 # Testing debug file parsing, see the pseudocodice in note.md
 def debug_parser():
     debug_dataset = []
-    with open ('debug_parser/debugTrace_small.txt','r') as file:
+    with open ('debug_parser/debugTrace_1.txt','r') as file:
         line_list = file.read().splitlines()
         for i in line_list:
-            line_number = line_list.index(i)
             iosxe_date = re.findall(IOSXE_DATE_REGEX, i)
             iosxe_time = re.findall(IOSXE_TIME_REGEX, i)
             iosxe_daemon = re.findall(IOSXE_DAEMON_REGEX, i)
@@ -72,9 +77,27 @@ def debug_parser():
             
             end_log_message = re.search(IOSXE_LOG_LEVEL_REGEX, i).end()
     
-            debug_dataset.append([line_number, iosxe_date[0], iosxe_time[0], iosxe_daemon[0], iosxe_category[0], iosxe_log_level[0], i[end_log_message:]])
-    for i in debug_dataset:
-        print(i)
-    return
+            debug_dataset.append([iosxe_date[0], iosxe_time[0], iosxe_daemon[0], iosxe_category[0], iosxe_log_level[0], i[end_log_message:]])
+    print(debug_dataset)
+    """
+    conn = sqlite3.connect('db/debug_parser.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS table1 (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            date TEXT,
+            time TEXT,
+            daemon TEXT,
+            category TEXT,
+            log_level TEXT,
+            message TEXT
+        )
+    ''')
+    for data in debug_dataset:
+        cursor.execute('INSERT INTO table1 (date, time, daemon, category, log_level, message) VALUES (?, ?, ?, ?, ?, ?)', (data[0], data[1], data[2], data[3], data[4], data[5]))
+    conn.commit()
+    conn.close()
 
+    return
+    """
 debug_parser()

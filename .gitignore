@@ -1,5 +1,6 @@
 venv/
 misc/
+db/
 __pycache__/
 swiss_conf.py
 *.spw

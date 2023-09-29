@@ -70,31 +70,6 @@ $ cat 'debugTrace_845f.04e7.d557(2).txt' | grep 'reason'
 2023/09/19 15:49:52.301440045 {wncd_x_R0-0}{1}: [client-orch-sm] [17435]: (info): MAC: 845f.04e7.d557  Deleting the client, reason: 185, CO_CLIENT_DELETE_REASON_SAE_AUTH_IN_ASSOCIATED_STATE, Client state S_CO_RUN
 2023/09/19 15:49:59.010607990 {wncd_x_R0-0}{1}: [client-orch-sm] [17435]: (info): MAC: 845f.04e7.d557  Deleting the client, reason: 35, CO_CLIENT_DELETE_REASON_SAE_AUTH_FAILURE, Client state S_CO_INIT
 2023/09/19 15:49:59.010749423 {wncd_x_R0-0}{1}: [client-orch-sm] [17435]: (ERR): MAC: 845f.04e7.d557  Failed to send client delete mobile. delete reason: 35, CO_CLIENT_DELETE_REASON_SAE_AUTH_FAILURE
-2023/09/19 15:50:18.104114025 {wncd_x_R0-0}{1}: [client-orch-sm] [17435]: (info): MAC: 845f.04e7.d557  Deleting the client, reason: 185, CO_CLIENT_DELETE_REASON_SAE_AUTH_IN_ASSOCIATED_STATE, Client state S_CO_RUN
-2023/09/19 15:50:23.110789120 {wncd_x_R0-0}{1}: [client-orch-sm] [17435]: (info): MAC: 845f.04e7.d557  Deleting the client, reason: 185, CO_CLIENT_DELETE_REASON_SAE_AUTH_IN_ASSOCIATED_STATE, Client state S_CO_RUN
-2023/09/19 15:50:29.816542675 {wncd_x_R0-0}{1}: [client-orch-sm] [17435]: (info): MAC: 845f.04e7.d557  Deleting the client, reason: 35, CO_CLIENT_DELETE_REASON_SAE_AUTH_FAILURE, Client state S_CO_INIT
-2023/09/19 15:50:29.816666722 {wncd_x_R0-0}{1}: [client-orch-sm] [17435]: (ERR): MAC: 845f.04e7.d557  Failed to send client delete mobile. delete reason: 35, CO_CLIENT_DELETE_REASON_SAE_AUTH_FAILURE
-2023/09/19 15:50:46.087863218 {wncd_x_R0-0}{1}: [client-orch-sm] [17435]: (info): MAC: 845f.04e7.d557  Deleting the client, reason: 185, CO_CLIENT_DELETE_REASON_SAE_AUTH_IN_ASSOCIATED_STATE, Client state S_CO_RUN
-2023/09/19 15:50:50.417482789 {wncd_x_R0-0}{1}: [client-orch-sm] [17435]: (info): MAC: 845f.04e7.d557  Deleting the client, reason: 185, CO_CLIENT_DELETE_REASON_SAE_AUTH_IN_ASSOCIATED_STATE, Client state S_CO_RUN
-2023/09/19 15:50:59.304294366 {wncd_x_R0-0}{1}: [client-orch-sm] [17435]: (info): MAC: 845f.04e7.d557  Deleting the client, reason: 35, CO_CLIENT_DELETE_REASON_SAE_AUTH_FAILURE, Client state S_CO_INIT
-2023/09/19 15:50:59.304421491 {wncd_x_R0-0}{1}: [client-orch-sm] [17435]: (ERR): MAC: 845f.04e7.d557  Failed to send client delete mobile. delete reason: 35, CO_CLIENT_DELETE_REASON_SAE_AUTH_FAILURE
-2023/09/19 15:51:44.615639701 {wncd_x_R0-0}{1}: [client-orch-sm] [17435]: (info): MAC: 845f.04e7.d557  Deleting the client, reason: 2, CO_CLIENT_DELETE_REASON_DEAUTH_OR_DISASSOC_REQ, Client state S_CO_RUN
-2023/09/19 15:51:54.075202901 {wncd_x_R0-0}{1}: [client-orch-sm] [17435]: (info): MAC: 845f.04e7.d557  Deleting the client, reason: 35, CO_CLIENT_DELETE_REASON_SAE_AUTH_FAILURE, Client state S_CO_INIT
-2023/09/19 15:51:54.075342980 {wncd_x_R0-0}{1}: [client-orch-sm] [17435]: (ERR): MAC: 845f.04e7.d557  Failed to send client delete mobile. delete reason: 35, CO_CLIENT_DELETE_REASON_SAE_AUTH_FAILURE
-2023/09/19 15:52:04.552921444 {wncd_x_R0-0}{1}: [client-orch-sm] [17435]: (info): MAC: 845f.04e7.d557  Deleting the client, reason: 35, CO_CLIENT_DELETE_REASON_SAE_AUTH_FAILURE, Client state S_CO_INIT
-2023/09/19 15:52:04.553027256 {wncd_x_R0-0}{1}: [client-orch-sm] [17435]: (ERR): MAC: 845f.04e7.d557  Failed to send client delete mobile. delete reason: 35, CO_CLIENT_DELETE_REASON_SAE_AUTH_FAILURE
-2023/09/19 15:52:08.875774353 {wncd_x_R0-0}{1}: [client-orch-sm] [17435]: (info): MAC: 845f.04e7.d557  Deleting the client, reason: 185, CO_CLIENT_DELETE_REASON_SAE_AUTH_IN_ASSOCIATED_STATE, Client state S_CO_IP_LEARN_IN_PROGRESS
-2023/09/19 15:55:08.583139538 {wncd_x_R0-0}{1}: [client-orch-sm] [17435]: (info): MAC: 845f.04e7.d557  Deleting the client, reason: 2, CO_CLIENT_DELETE_REASON_DEAUTH_OR_DISASSOC_REQ, Client state S_CO_RUN
-2023/09/19 15:55:32.785666872 {wncd_x_R0-0}{1}: [client-orch-sm] [17435]: (info): MAC: 845f.04e7.d557  Deleting the client, reason: 35, CO_CLIENT_DELETE_REASON_SAE_AUTH_FAILURE, Client state S_CO_INIT
-2023/09/19 15:55:32.785788474 {wncd_x_R0-0}{1}: [client-orch-sm] [17435]: (ERR): MAC: 845f.04e7.d557  Failed to send client delete mobile. delete reason: 35, CO_CLIENT_DELETE_REASON_SAE_AUTH_FAILURE
-2023/09/19 15:55:34.705446845 {wncd_x_R0-0}{1}: [client-orch-sm] [17435]: (info): MAC: 845f.04e7.d557  Deleting the client, reason: 185, CO_CLIENT_DELETE_REASON_SAE_AUTH_IN_ASSOCIATED_STATE, Client state S_CO_RUN
-2023/09/19 15:55:43.321769704 {wncd_x_R0-0}{1}: [client-orch-sm] [17435]: (info): MAC: 845f.04e7.d557  Deleting the client, reason: 185, CO_CLIENT_DELETE_REASON_SAE_AUTH_IN_ASSOCIATED_STATE, Client state S_CO_RUN
-2023/09/19 15:56:05.568479853 {wncd_x_R0-0}{1}: [client-orch-sm] [17435]: (info): MAC: 845f.04e7.d557  Deleting the client, reason: 35, CO_CLIENT_DELETE_REASON_SAE_AUTH_FAILURE, Client state S_CO_INIT
-2023/09/19 15:56:05.568609326 {wncd_x_R0-0}{1}: [client-orch-sm] [17435]: (ERR): MAC: 845f.04e7.d557  Failed to send client delete mobile. delete reason: 35, CO_CLIENT_DELETE_REASON_SAE_AUTH_FAILURE
-2023/09/19 15:56:05.773374970 {wncd_x_R0-0}{1}: [dot11] [17435]: (ERR): MAC: 845f.04e7.d557  Dot11 update co assoc fail. Sent assoc failure to CO. delete reason: 54, CO_CLIENT_DELETE_REASON_DOT11_INVALID_PMKID
-2023/09/19 15:56:05.773389224 {wncd_x_R0-0}{1}: [client-orch-sm] [17435]: (info): MAC: 845f.04e7.d557  Deleting the client, reason: 54, CO_CLIENT_DELETE_REASON_DOT11_INVALID_PMKID, Client state S_CO_ASSOCIATING
-2023/09/19 15:56:09.868174016 {wncd_x_R0-0}{1}: [client-orch-sm] [17435]: (info): MAC: 845f.04e7.d557  Deleting the client, reason: 185, CO_CLIENT_DELETE_REASON_SAE_AUTH_IN_ASSOCIATED_STATE, Client state S_CO_RUN
-2023/09/19 15:56:14.879357285 {wncd_x_R0-0}{1}: [client-orch-sm] [17435]: (info): MAC: 845f.04e7.d557  Deleting the client, reason: 185, CO_CLIENT_DELETE_REASON_SAE_AUTH_IN_ASSOCIATED_STATE, Client state S_CO_RUN
 ```
 
 ## Pseudocodice
@@ -109,14 +84,14 @@ Diventa
 ```csv
 2023/02/27,14:41:15.703540,{wncd_x_R0-0}{1}: [client-keymgmt] [16602]: (info): MAC: c81c.fe19.f2e5  EAP key M1 Sent successfully
 ```
-Date: `2023/02/27`
-Time: `14:41:15.703540`
-Daemon: `{wncd_x_R0-0}{1}:`
-Category: `[client-keymgmt]`
-UnknownID: `[16602]:`
-Severity: `(info):`
-MAC: `MAC: c81c.fe19.f2e5`
-Message: `EAP key M1 Sent successfully`
+- Date: `2023/02/27`
+- Time: `14:41:15.703540`
+- Daemon: `{wncd_x_R0-0}{1}:`
+- Category: `[client-keymgmt]`
+- UnknownID: `[16602]:`
+- Severity: `(info):`
+- MAC: `MAC: c81c.fe19.f2e5`
+- Message: `EAP key M1 Sent successfully`
 
 - Apro il file e lo divido per mac-address con una regex (esempio 2 mac-address)
 - Di quei 2 file, uno per mac address, lo suddivido per associazioni e riassociazioni (non necessario su 9800)
@@ -127,3 +102,9 @@ Risultato prima versione
 ```python
 [7, '2023/09/19', '15:49:46.963798763', '{wncd_x_R0-0}{1}:', '[auth-mgr] [17435]:', 'info', ' [845f.04e7.d557:capwap_900000a1] Session Start event called from SANET-SHIM, vlan: 0']
 ```
+
+## Parsing
+
+Usare SQLite o Pandas?
+
+Fondamentale filtrare per `[client-orch-state]` per avere uno storico degli eventi.
