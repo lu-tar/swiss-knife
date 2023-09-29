@@ -74,12 +74,12 @@ def debug_parser():
             iosxe_daemon = re.findall(IOSXE_DAEMON_REGEX, i)
             iosxe_category = re.findall(IOSXE_CATEGORY_REGEX, i)
             iosxe_log_level = re.findall(IOSXE_LOG_LEVEL_REGEX, i)
-            
+            print(iosxe_log_level)
             end_log_message = re.search(IOSXE_LOG_LEVEL_REGEX, i).end()
     
             debug_dataset.append([iosxe_date[0], iosxe_time[0], iosxe_daemon[0], iosxe_category[0], iosxe_log_level[0], i[end_log_message:]])
     print(debug_dataset)
-    """
+    
     conn = sqlite3.connect('db/debug_parser.db')
     cursor = conn.cursor()
     cursor.execute('''
@@ -99,5 +99,5 @@ def debug_parser():
     conn.close()
 
     return
-    """
+    
 debug_parser()

@@ -105,6 +105,6 @@ Risultato prima versione
 
 ## Parsing
 
-Usare SQLite o Pandas?
+Rimosso `Logging display requested on 2023/09/19 16:13:58 (ITALIA) for Hostname: [mon-a2-wlc-01], Model: [C9800-L-F-K9        ], Version: [17.09.03], SN: [FOC26290JZ8], MD_SN: [FCL262900CK]` da in cima al file, valutare se farci qualcosa.
 
 Fondamentale filtrare per `[client-orch-state]` per avere uno storico degli eventi.

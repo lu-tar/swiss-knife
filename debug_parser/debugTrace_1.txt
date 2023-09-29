@@ -1,4 +1,3 @@
-Logging display requested on 2023/09/19 16:13:58 (ITALIA) for Hostname: [mon-a2-wlc-01], Model: [C9800-L-F-K9        ], Version: [17.09.03], SN: [FOC26290JZ8], MD_SN: [FCL262900CK]
 2023/09/19 15:46:08.412775977 {wncd_x_R0-0}{1}: [dot11] [17435]: (info): MAC: 845f.04e7.d557  DOT11 state transition: S_DOT11_ASSOCIATED -> S_DOT11_TO_DELETE
 2023/09/19 15:46:08.412807892 {wncd_x_R0-0}{1}: [client-orch-sm] [17435]: (info): MAC: 845f.04e7.d557  Deleting the client, reason: 2, CO_CLIENT_DELETE_REASON_DEAUTH_OR_DISASSOC_REQ, Client state S_CO_RUN
 2023/09/19 15:46:08.412935865 {wncd_x_R0-0}{1}: [errmsg] [17435]: (debug): %CLIENT_ORCH_LOG-7-CLIENT_MOVED_TO_DELETE_STATE: R0/0: wncd: Username (null), MAC: 845f.04e7.d557, IP fe80::10ed:705a:9dba:dc43 10.0.0.145 disconnected from AP (mon-1b-ap-172) with SSID (MOBILE)
