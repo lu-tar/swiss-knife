@@ -15,7 +15,7 @@ IOSXE_DAEMON_REGEX = '\{[^}]+\}\{\d\}:'
 IOSXE_CATEGORY_REGEX = '\[[^\]]+\] \[[0-9]+\]:'
 IOSXE_LOG_LEVEL_REGEX = '\(([^)]+)\):'
 
-CISCO_DOTTED_MAC_REGEX = '"\b[\dA-Za-z]{4}\b.\b[\dA-Za-z]{4}\b.\b[\dA-Za-z]{4}\b"gm'
+CISCO_DOTTED_MAC_REGEX = '\b[\dA-Za-z]{4}\b.\b[\dA-Za-z]{4}\b.\b[\dA-Za-z]{4}\b'
 
 def list_interfaces():
     try:
@@ -67,11 +67,13 @@ def show_motd():
         pass
     return
 
-def hello_world(hello_world_name):
-    print(f"Hello world and {hello_world_name}!")
+# Test function
+def hello_world(hello_world_surname, hello_world_name):
+    for e in range(1):
+        print(f"Hello world and {hello_world_surname} {hello_world_name}!")
 
-# Testing debug file parsing, see the pseudocodice in note.md
-def debug_to_db(debug_filepath):
+# See debug_parser in shell
+def debug_to_db(debug_filepath, debug_id_name):
     debug_dataset = []
     #debug_filepath = 'debug_parser/debugTrace_1.txt'
     try:
@@ -83,7 +85,6 @@ def debug_to_db(debug_filepath):
                 iosxe_daemon = re.findall(IOSXE_DAEMON_REGEX, i)
                 iosxe_category = re.findall(IOSXE_CATEGORY_REGEX, i)
                 iosxe_log_level = re.findall(IOSXE_LOG_LEVEL_REGEX, i)
-                print(iosxe_log_level)
                 end_log_message = re.search(IOSXE_LOG_LEVEL_REGEX, i).end()
         
                 debug_dataset.append([iosxe_date[0], iosxe_time[0], iosxe_daemon[0], iosxe_category[0], iosxe_log_level[0], i[end_log_message:]])
@@ -95,9 +96,10 @@ def debug_to_db(debug_filepath):
     
     conn = sqlite3.connect('db/debug_parser.db')
     cursor = conn.cursor()
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS table1 (
+    cursor.execute(f'''
+        CREATE TABLE IF NOT EXISTS Table1 (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
+            id_name TEXT,
             date TEXT,
             time TEXT,
             daemon TEXT,
@@ -107,7 +109,7 @@ def debug_to_db(debug_filepath):
         )
     ''')
     for data in debug_dataset:
-        cursor.execute('INSERT INTO table1 (date, time, daemon, category, log_level, message) VALUES (?, ?, ?, ?, ?, ?)', (data[0], data[1], data[2], data[3], data[4], data[5]))
+        cursor.execute('INSERT INTO Table1 (id_name, date, time, daemon, category, log_level, message) VALUES (?, ?, ?, ?, ?, ?, ?)', (debug_id_name, data[0], data[1], data[2], data[3], data[4], data[5]))
     conn.commit()
     conn.close()
 

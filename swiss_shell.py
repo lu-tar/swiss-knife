@@ -258,13 +258,11 @@ class SwissKnife(cmd2.Cmd):
                 if args.loop == False:
                     for i in range(0, args.repeat):
                         CURRENT_TIME = datetime.now()
-                        CLOCK_TIME = CURRENT_TIME.strftime("%H:%M:%S")
                         print(CLOCK_TIME, end =" ")
                         ping(args.address, verbose=True, count=1, interval=1)
                 else:
                     while True:
                         CURRENT_TIME = datetime.now()
-                        CLOCK_TIME = CURRENT_TIME.strftime("%H:%M:%S")
                         print(CLOCK_TIME, end =" ")
                         ping(args.address, verbose=True, count=1, interval=1)
         else:
@@ -334,17 +332,21 @@ class SwissKnife(cmd2.Cmd):
         else:
             print(OPERATING_SYSTEM)
     
+    # WLC Debug parser
     debug_parser = cmd2.Cmd2ArgumentParser()
-    debug_parser.add_argument('-f', '--filename', type=str, default='debug_parser/debugTrace_1.txt', help='File path to debug file, default is debug_parser/debugTrace_1.txt"')
+    debug_parser.add_argument('-f', '--filename', type=str, default='debug_parser/debugTrace_1.txt', help='File path to debug trace file, default is debug_parser/debugTrace_1.txt')
+    debug_parser.add_argument('-id', '--idname', type=str, default=CURRENT_TIME.strftime("%H%M%S"), help='Set the table name, default is the time as %H%M%S')
     @cmd2.with_argparser(debug_parser)
     def do_debug(self, args):
-        swiss_func.debug_to_db(args.filename)
+        swiss_func.debug_to_db(args.filename, args.idname)
 
+    # Test command
     hello_parser = cmd2.Cmd2ArgumentParser()
     hello_parser.add_argument('-name', type=str, default='Robot', help='A nice hello to test functions')
+    hello_parser.add_argument('-surname', type=str, default='Spaceship', help='A nice hello to test functions')
     @cmd2.with_argparser(hello_parser)
     def do_hello(self, args):
-        swiss_func.hello_world(args.name)
+        swiss_func.hello_world(args.name, args.surname)
 
 
     # Dividing commands in categories (help command)
