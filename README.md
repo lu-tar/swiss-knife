@@ -5,8 +5,8 @@ A multipurpose shell for networking tasks written in Python cmd2.
 
 🛠️ Fix 🛠️
 - [x] ipconfig calls with agnostic library like [psutil](https://pypi.org/project/psutil/)
-- [ ] Every open file statements needs an exception
-- [ ] Every API needs a exception for office SSL inspection
+- [x] Every open file statements needs an exception
+- [x] Every API needs a exception for office SSL inspection
 
 🚀 High priority 🚀
 - [x] Change local ip address from static to dynamic
