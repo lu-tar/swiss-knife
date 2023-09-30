@@ -108,3 +108,17 @@ Risultato prima versione
 Rimosso `Logging display requested on 2023/09/19 16:13:58 (ITALIA) for Hostname: [mon-a2-wlc-01], Model: [C9800-L-F-K9        ], Version: [17.09.03], SN: [FOC26290JZ8], MD_SN: [FCL262900CK]` da in cima al file, valutare se farci qualcosa.
 
 Fondamentale filtrare per `[client-orch-state]` per avere uno storico degli eventi.
+
+## How to use variables in SQL statement in Python?
+```python
+# Multiple values single statement/execution
+c.execute('SELECT * FROM stocks WHERE symbol=? OR symbol=?', ('RHAT', 'MSO'))
+print c.fetchall()
+c.execute('SELECT * FROM stocks WHERE symbol IN (?, ?)', ('RHAT', 'MSO'))
+print c.fetchall()
+# This also works, though ones above are better as a habit as it's inline with syntax of executemany().. but your choice.
+c.execute('SELECT * FROM stocks WHERE symbol=? OR symbol=?', 'RHAT', 'MSO')
+print c.fetchall()
+# Insert a single item
+c.execute('INSERT INTO stocks VALUES (?,?,?,?,?)', ('2006-03-28', 'BUY', 'IBM', 1000, 45.00))
+```

@@ -20,6 +20,7 @@ A multipurpose shell for networking tasks written in Python cmd2.
 - [ ] Tree listing files in a directory + test on remote like Sharepoint
 - [ ] Obsidian markdown integration + cheatsheet
   - [ ] list all browser links
+  - [ ] [langchain](https://python.langchain.com/docs/get_started/introduction)
 - [x] Feature to spawn a cmd.exe process + a specific ping to leaving the swiss knife shell free
 
 🐌 Low priority 🐌
