@@ -59,10 +59,10 @@ class SwissKnife(cmd2.Cmd):
         print(nslookup_cmd.stdout.decode('utf-8', 'ignore'))
 
     # subnet printer from decimal value
-    sub_parser = cmd2.Cmd2ArgumentParser()
-    sub_parser.add_argument(dest='value', type=int, help='From integer to subnet')
-    @cmd2.with_argparser(sub_parser)
-    def do_sub(self, args):
+    subnet_parser = cmd2.Cmd2ArgumentParser()
+    subnet_parser.add_argument(dest='value', type=int, help='From integer to subnet')
+    @cmd2.with_argparser(subnet_parser)
+    def do_subnet(self, args):
         mask = int(args.value)
         if mask > 32 or mask < 0:
             pass
@@ -298,7 +298,7 @@ class SwissKnife(cmd2.Cmd):
 
     # Dividing commands in categories (help command)
     categorize((do_pub, do_iplist, do_macvendor, do_tcpRTT, do_wifistat, do_nslookup, do_portlist, do_ipcheck, do_ping, do_changeip), "Network")
-    categorize((do_binary, do_decimal, do_sub), "Calc")
+    categorize((do_binary, do_decimal, do_subnet), "Calc")
     categorize((do_putty), "SSH")
     categorize((do_grep), "Files")
     categorize((do_time, do_openapps), "Miscellanea")

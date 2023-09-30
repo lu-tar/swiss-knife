@@ -99,5 +99,3 @@ def debug_parser():
     conn.close()
 
     return
-    
-debug_parser()
