@@ -5,6 +5,7 @@ cmd2==2.4.3
 idna==3.4
 markdown-it-py==2.2.0
 mdurl==0.1.2
+progress==1.6
 psutil==5.9.4
 Pygments==2.14.0
 pyperclip==1.8.2

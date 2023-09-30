@@ -16,6 +16,8 @@ from rich import print
 from tcp_latency import measure_latency
 import ipaddress
 from ipaddress import ip_network
+from time import sleep
+from progress.spinner import MoonSpinner
 
 from swiss_conf import *
 import swiss_func
@@ -254,24 +256,33 @@ class SwissKnife(cmd2.Cmd):
                 #   file.write(args.address + "\n" + args.repeat)
                 subprocess.Popen('x-terminal-emulator -e "bash -c \\"ping 1.1.1.1; exec bash\\""', shell=True)
 
-    # Opening a list of programs, needs improvment because Obsidian throws a logging stopping other programs
+    # Opening a list of programs with external bat if OS is Windows
+    # https://builtin.com/software-engineering-perspectives/python-progress-bar
     openapps_parser = cmd2.Cmd2ArgumentParser()
     @cmd2.with_argparser(openapps_parser)
     def do_openapps(self, _):
-        for i in APP_LIST:
-            print("Opening " + str(i))
-            subprocess.call(["start", "cmd", "/K", i], shell=True)
+        if OPERATING_SYSTEM == "Windows":
+            with open(OPENAPPS_SCRIPT, 'r') as file:
+                line_list = file.read().splitlines()
+                for i in line_list: print (i)
+            with MoonSpinner('CTRL+C to stop…') as bar:
+                for i in range(6):
+                    sleep(0.5)
+                    bar.next()
+            subprocess.call([OPENAPPS_SCRIPT])
+        else:
+            print(OPERATING_SYSTEM)
 
-    # Grepping file from the GREP_FOLDER path
+    # Grepping file from the GREP_FOLDER pat; needs improvements
     grep_parser = cmd2.Cmd2ArgumentParser()
     grep_parser.add_argument(dest='value', type=str, help='String to find in file')
     grep_parser.add_argument('-f', '--filename', type=str, help='Just the filename')
-    grep_parser.add_argument('-fp', '--filepath', type=str, help='Just the filename')
+    #grep_parser.add_argument('-fp', '--filepath', type=str, help='Just the filename')
     @cmd2.with_argparser(grep_parser)
     def do_grep(self, args):
         print("File: " + str(GREP_FOLDER) + args.filename)
         with open(str(GREP_FOLDER) + "/" + args.filename, 'r') as file:
-            line_list = file.readlines()
+            line_list = file.read().splitlines()
         for i in line_list:
             if args.value in i:
                 print(i)
@@ -294,7 +305,7 @@ class SwissKnife(cmd2.Cmd):
                 # -dhcp is True then set the interface to dhcp
                 subprocess.run(["netsh", "interface", "ipv4", "set", "address", "name=" + args.interface_name, "source=dhcp"], shell=True)
         else:
-            print("")
+            print(OPERATING_SYSTEM)
 
     # Dividing commands in categories (help command)
     categorize((do_pub, do_iplist, do_macvendor, do_tcpRTT, do_wifistat, do_nslookup, do_portlist, do_ipcheck, do_ping, do_changeip), "Network")

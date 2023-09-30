@@ -1,5 +1,6 @@
 import requests
 import platform
+import pathlib
 # Configuration file for swiss_func
 OPERATING_SYSTEM = platform.system()
 CLOCK_FORMAT = "%H:%M:%S"
@@ -7,17 +8,19 @@ CLOCK_FORMAT = "%H:%M:%S"
 IP_INTERFACES_IGNORE = ["lo"]
 IP_INTERFACES_INCLUDE = ["Ethernet", "Ethernet 2"]
 INTERNET_IP = str(requests.get("https://api.ipify.org?format=text").text)
-LIST_ROUTE = True
+LIST_ROUTE = False
 # Banner stuff
-IP_BANNER = True
-ASCII_BANNER = True
+IP_BANNER = False
+ASCII_BANNER = False
 ASCII_ART = """
     ,adPPYba,   88   ,d8
     I8[         88 ,a8'
     `Y8ba,      8888[
         ]8I     88`'Yba,
-   'taYbbdP'    88   `Y8a  - Swiss Knife v1.0
+___'taYbbdP'    88   `Y8a  v1.0______________________________________
 """
 # Paths to files or programs
-PATH_TO_PUTTY = "C:\Program Files\PuTTY\putty.exe"
+# An empty or incorrect path generates app startup latency
+PATH_TO_PUTTY = pathlib.Path(r"C:\Program Files\PuTTY\putty.exe")
 PATH_TO_PORTS_CSV = "csv/service-names-port-numbers.csv"
+GREP_FOLDER = pathlib.Path(r"C:\Users\luca9\DEV\swiss-knife\csv")
