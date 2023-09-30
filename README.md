@@ -1,7 +1,7 @@
 # swiss-knife 🇨🇭🔪
 A multipurpose shell for networking tasks written in Python cmd2.
 
-**Spring '23 to-do list**
+**To-do list**
 
 🛠️ Fix 🛠️
 - [x] ipconfig calls with agnostic library like [psutil](https://pypi.org/project/psutil/)
@@ -14,12 +14,12 @@ A multipurpose shell for networking tasks written in Python cmd2.
 - [x] General Windows app automation maybe with os calls or PyAutogui or Selenium
 - [ ] [Nornir](https://nornir.readthedocs.io/en/latest/index.html) integration
 - [x] Search a file for a list of keyword like an automated grep + colored output
-  - [x] Debug files from Cisco 9800
-  - [ ] 
+  - [x] Debug files from Cisco 9800 (see debug_parser/udl)
+  - [ ] Debug files from AireOS controller
   - [ ] Aruba / Cisco tech-support file
 - [ ] Tree listing files in a directory + test on remote like Sharepoint
 - [ ] Obsidian markdown integration + cheatsheet
-  - [ ] links
+  - [ ] list all browser links
 - [x] Feature to spawn a cmd.exe process + a specific ping to leaving the swiss knife shell free
 
 🐌 Low priority 🐌
