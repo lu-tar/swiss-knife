@@ -18,7 +18,11 @@ IOSXE_LOG_LEVEL_REGEX = '\(([^)]+)\):'
 CISCO_DOTTED_MAC_REGEX = '"\b[\dA-Za-z]{4}\b.\b[\dA-Za-z]{4}\b.\b[\dA-Za-z]{4}\b"gm'
 
 def list_interfaces():
-    print("Public IP: " + INTERNET_IP)
+    try:
+        print("Public IP: " + requests.get("https://api.ipify.org?format=text").text)
+    except Exception as e:
+        print(f"Request to api.ipify.org: {e}")
+
     # Ciclio il dictionary psutil.net_if_addrs()
     for nic, addrs in psutil.net_if_addrs().items():
         # Per ogni interfaccia presente IP_INTERFACES_INCLUDE 
@@ -66,18 +70,24 @@ def show_motd():
 # Testing debug file parsing, see the pseudocodice in note.md
 def debug_parser():
     debug_dataset = []
-    with open ('debug_parser/debugTrace_1.txt','r') as file:
-        line_list = file.read().splitlines()
-        for i in line_list:
-            iosxe_date = re.findall(IOSXE_DATE_REGEX, i)
-            iosxe_time = re.findall(IOSXE_TIME_REGEX, i)
-            iosxe_daemon = re.findall(IOSXE_DAEMON_REGEX, i)
-            iosxe_category = re.findall(IOSXE_CATEGORY_REGEX, i)
-            iosxe_log_level = re.findall(IOSXE_LOG_LEVEL_REGEX, i)
-            print(iosxe_log_level)
-            end_log_message = re.search(IOSXE_LOG_LEVEL_REGEX, i).end()
-    
-            debug_dataset.append([iosxe_date[0], iosxe_time[0], iosxe_daemon[0], iosxe_category[0], iosxe_log_level[0], i[end_log_message:]])
+    debug_filepath = 'debug_parser/debugTrace_1.txt'
+    try:
+        with open (debug_filepath,'r') as file:
+            line_list = file.read().splitlines()
+            for i in line_list:
+                iosxe_date = re.findall(IOSXE_DATE_REGEX, i)
+                iosxe_time = re.findall(IOSXE_TIME_REGEX, i)
+                iosxe_daemon = re.findall(IOSXE_DAEMON_REGEX, i)
+                iosxe_category = re.findall(IOSXE_CATEGORY_REGEX, i)
+                iosxe_log_level = re.findall(IOSXE_LOG_LEVEL_REGEX, i)
+                print(iosxe_log_level)
+                end_log_message = re.search(IOSXE_LOG_LEVEL_REGEX, i).end()
+        
+                debug_dataset.append([iosxe_date[0], iosxe_time[0], iosxe_daemon[0], iosxe_category[0], iosxe_log_level[0], i[end_log_message:]])
+    except FileNotFoundError:
+                print(f"{debug_filepath} does not exist.")
+    except Exception as e:
+        print(f"An error occurred: {e}")
     print(debug_dataset)
     
     conn = sqlite3.connect('db/debug_parser.db')

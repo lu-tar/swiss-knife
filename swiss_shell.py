@@ -45,7 +45,10 @@ class SwissKnife(cmd2.Cmd):
     intro = ''
     # Pulling mac vendor from https://api.macvendors.com/FC:FB:FB:01:FA:21
     def do_macvendor(selg, args):
-        print(requests.get("https://api.macvendors.com/" + args).text)
+        try:
+            print(requests.get("https://api.macvendors.com/" + args).text)
+        except Exception as e:
+            print(f"An error occurred: {e}")
 
     # Print current time and a small calendar
     def do_time(self, _):
@@ -137,17 +140,22 @@ class SwissKnife(cmd2.Cmd):
     portlist_parser.add_argument(dest='value', help='Port or protocol')
     @cmd2.with_argparser(portlist_parser)
     def do_portlist(self, args):
-        with open(PATH_TO_PORTS_CSV, 'r') as file:
-            reader = csv.reader(file, delimiter=",")
-            # isinstance e' meglio di type
-            if isinstance(args.value,str):
-                for row in reader:
-                    if args.value in row:
-                        print(row[:4])
-            else:
-                for row in reader:
-                    if re.search(r'\b' + args.value + r'\b', str(row)):
-                        print(row[:4])
+        try:
+            with open(PATH_TO_PORTS_CSV, 'r') as file:
+                reader = csv.reader(file, delimiter=",")
+                    # isinstance e' meglio di type
+                if isinstance(args.value,str):
+                    for row in reader:
+                        if args.value in row:
+                            print(row[:4])
+                else:
+                    for row in reader:
+                        if re.search(r'\b' + args.value + r'\b', str(row)):
+                            print(row[:4])
+        except FileNotFoundError:
+                print(f"{PATH_TO_PORTS_CSV} does not exist.")
+        except Exception as e:
+            print(f"An error occurred: {e}")
 
     # tcpRTT calcs TCP RTT to a host usig tcp_latency library
     # common arguments like port number (443 by default), repetitions and timeout (both 5 and 1 by default)
@@ -224,12 +232,16 @@ class SwissKnife(cmd2.Cmd):
     @cmd2.with_argparser(pubip_parser)
     def do_pub(self, args):
         if args.verbose:
-            print("Verbose API call")
-            ifconfig_api = requests.get("http://ifconfig.co/json").json()
-            print(ifconfig_api)
+            try:
+                print("Verbose API call")
+                print(requests.get("http://ifconfig.co/json").json())
+            except Exception as e:
+                print(f"An error occurred: {e}")
         else:
-            print(INTERNET_IP)
-
+            try:
+                print(requests.get("https://api.ipify.org?format=text").text)
+            except Exception as e:
+                print(f"An error occurred: {e}")
     # Ping using pythonping + if spw argument is specified the script try to open a shell pinging (NOT WORKING NEEDS ATTENTION)
     # Using uname_output we can check if we are in a Linux o Win machine
     ping_parser = cmd2.Cmd2ArgumentParser()
@@ -257,8 +269,6 @@ class SwissKnife(cmd2.Cmd):
                         ping(args.address, verbose=True, count=1, interval=1)
         else:
             if args.spawn:
-                #with open ("ping_conf", "w") as file:
-                #   file.write(args.address + "\n" + args.repeat)
                 subprocess.Popen('x-terminal-emulator -e "bash -c \\"ping 1.1.1.1; exec bash\\""', shell=True)
 
     # Opening a list of programs with external bat if OS is Windows
@@ -267,9 +277,14 @@ class SwissKnife(cmd2.Cmd):
     @cmd2.with_argparser(openapps_parser)
     def do_openapps(self, _):
         if OPERATING_SYSTEM == "Windows":
-            with open(OPENAPPS_SCRIPT, 'r') as file:
-                line_list = file.read().splitlines()
-                for i in line_list: print (i)
+            try:
+                with open(OPENAPPS_SCRIPT, 'r') as file:
+                    line_list = file.read().splitlines()
+                    for i in line_list: print (i)
+            except FileNotFoundError:
+                print(f"{OPENAPPS_SCRIPT} does not exist.")
+            except Exception as e:
+                print(f"An error occurred: {e}")
             with MoonSpinner('CTRL+C to stop…') as bar:
                 for i in range(6):
                     sleep(0.5)
@@ -277,6 +292,8 @@ class SwissKnife(cmd2.Cmd):
             subprocess.call([OPENAPPS_SCRIPT])
         else:
             print(OPERATING_SYSTEM)
+
+
 
     # Grepping file from the GREP_FOLDER pat; needs improvements
     grep_parser = cmd2.Cmd2ArgumentParser()
@@ -286,11 +303,16 @@ class SwissKnife(cmd2.Cmd):
     @cmd2.with_argparser(grep_parser)
     def do_grep(self, args):
         print("File: " + str(GREP_FOLDER) + args.filename)
-        with open(str(GREP_FOLDER) + "/" + args.filename, 'r') as file:
-            line_list = file.read().splitlines()
-        for i in line_list:
-            if args.value in i:
-                print(i)
+        try:
+            with open(str(GREP_FOLDER) + "/" + args.filename, 'r') as file:
+                line_list = file.read().splitlines()
+            for i in line_list:
+                if args.value in i:
+                    print(i)
+        except FileNotFoundError:
+            print(f"The file {args.value} does not exist.")
+        except Exception as e:
+            print(f"An error occurred: {e}")
 
     # Change ip on Windows with command line
     changeip_parser = cmd2.Cmd2ArgumentParser()
