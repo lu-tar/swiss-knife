@@ -245,7 +245,7 @@ class SwissKnife(cmd2.Cmd):
     # Ping using pythonping + if spw argument is specified the script try to open a shell pinging (NOT WORKING NEEDS ATTENTION)
     # Using uname_output we can check if we are in a Linux o Win machine
     ping_parser = cmd2.Cmd2ArgumentParser()
-    ping_parser.add_argument(dest='address',type=str, help='IP Address')
+    ping_parser.add_argument(dest='address', type=str, help='IP Address')
     ping_parser.add_argument('-r', '--repeat', type=int, default=3, nargs='?', help='output [n] times')
     ping_parser.add_argument('-spw', '--spawn', default=False, action="store_true")
     ping_parser.add_argument('-t', '--loop', default=False, action="store_true")
@@ -316,7 +316,7 @@ class SwissKnife(cmd2.Cmd):
 
     # Change ip on Windows with command line
     changeip_parser = cmd2.Cmd2ArgumentParser()
-    changeip_parser.add_argument(dest='interface_name',type=str, help='Interface name like "Ethernet"')
+    changeip_parser.add_argument(dest='interface_name', type=str, help='Interface name like "Ethernet"')
     changeip_parser.add_argument('-dhcp', '--dhcp', default=False, action="store_true", help="Change ip to static/dynamic using netsh")
     @cmd2.with_argparser(changeip_parser)
     def do_changeip(self, args):
@@ -333,13 +333,27 @@ class SwissKnife(cmd2.Cmd):
                 subprocess.run(["netsh", "interface", "ipv4", "set", "address", "name=" + args.interface_name, "source=dhcp"], shell=True)
         else:
             print(OPERATING_SYSTEM)
+    
+    debug_parser = cmd2.Cmd2ArgumentParser()
+    debug_parser.add_argument('-f', '--filename', type=str, default='debug_parser/debugTrace_1.txt', help='File path to debug file, default is debug_parser/debugTrace_1.txt"')
+    @cmd2.with_argparser(debug_parser)
+    def do_debug(self, args):
+        swiss_func.debug_to_db(args.filename)
+
+    hello_parser = cmd2.Cmd2ArgumentParser()
+    hello_parser.add_argument('-name', type=str, default='Robot', help='A nice hello to test functions')
+    @cmd2.with_argparser(hello_parser)
+    def do_hello(self, args):
+        swiss_func.hello_world(args.name)
+
 
     # Dividing commands in categories (help command)
+    categorize((do_debug), "WLC debug parser")
     categorize((do_pub, do_iplist, do_macvendor, do_tcpRTT, do_wifistat, do_nslookup, do_portlist, do_ipcheck, do_ping, do_changeip), "Network")
     categorize((do_binary, do_decimal, do_subnet), "Calc")
     categorize((do_putty), "SSH")
     categorize((do_grep), "Files")
-    categorize((do_time, do_openapps), "Miscellanea")
+    categorize((do_time, do_openapps, do_hello), "Miscellanea")
 
 if __name__ == '__main__':
     import sys

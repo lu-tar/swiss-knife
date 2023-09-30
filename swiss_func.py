@@ -67,10 +67,13 @@ def show_motd():
         pass
     return
 
+def hello_world(hello_world_name):
+    print(f"Hello world and {hello_world_name}!")
+
 # Testing debug file parsing, see the pseudocodice in note.md
-def debug_parser():
+def debug_to_db(debug_filepath):
     debug_dataset = []
-    debug_filepath = 'debug_parser/debugTrace_1.txt'
+    #debug_filepath = 'debug_parser/debugTrace_1.txt'
     try:
         with open (debug_filepath,'r') as file:
             line_list = file.read().splitlines()
@@ -88,7 +91,7 @@ def debug_parser():
                 print(f"{debug_filepath} does not exist.")
     except Exception as e:
         print(f"An error occurred: {e}")
-    print(debug_dataset)
+    #print(debug_dataset)
     
     conn = sqlite3.connect('db/debug_parser.db')
     cursor = conn.cursor()
