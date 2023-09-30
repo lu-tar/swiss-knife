@@ -23,4 +23,5 @@ ___'taYbbdP'    88   `Y8a  v1.0______________________________________
 # An empty or incorrect path generates app startup latency
 PATH_TO_PUTTY = pathlib.Path(r"C:\Program Files\PuTTY\putty.exe")
 PATH_TO_PORTS_CSV = "csv/service-names-port-numbers.csv"
+OPENAPPS_SCRIPT = "openapps.bat"
 GREP_FOLDER = pathlib.Path(r"C:\Users\luca9\DEV\swiss-knife\csv")

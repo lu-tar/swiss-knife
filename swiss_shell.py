@@ -7,7 +7,7 @@ import requests
 import platform
 import csv
 import calendar
-import pathlib
+#import pathlib
 from pythonping import ping
 from datetime import datetime
 from rich.console import Console
@@ -56,8 +56,11 @@ class SwissKnife(cmd2.Cmd):
         print(calendar.month(int(year), int(month)))
 
     # nslookup of a host
+    nslookup_parser = cmd2.Cmd2ArgumentParser()
+    nslookup_parser.add_argument(dest='value', type=str, help='DNS lookup of a hostname')
+    @cmd2.with_argparser(nslookup_parser)
     def do_nslookup(self, args):
-        nslookup_cmd = subprocess.run(["nslookup",str(args)], stdout=subprocess.PIPE, help='nslookup [hostname]')
+        nslookup_cmd = subprocess.run(["nslookup", args.value], stdout=subprocess.PIPE)
         print(nslookup_cmd.stdout.decode('utf-8', 'ignore'))
 
     # subnet printer from decimal value
