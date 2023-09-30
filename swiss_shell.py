@@ -153,13 +153,15 @@ class SwissKnife(cmd2.Cmd):
     # common arguments like port number (443 by default), repetitions and timeout (both 5 and 1 by default)
     # if strict is specified only the latency is displayer not the ping-like statistics
     latency_parser = cmd2.Cmd2ArgumentParser()
-    latency_parser.add_argument(dest='host', type=str, help='Measure the TCP latency between you to a specified host')
+    latency_parser.add_argument(dest='host', type=str, help='Measure the TCP latency between you to a specified host. Port 443, 5 repetitions and 1 s timeout is the default)')
     latency_parser.add_argument('-p', '--port', type=int, default=443, nargs='?', help='Destination port')
     latency_parser.add_argument('-r', '--repeat', type=int, default=5, nargs='?', help='How many time measure_latency runs')
     latency_parser.add_argument('-t', '--timeout', type=int, default=1, nargs='?', help='Measure_latency timeout')
     latency_parser.add_argument('-s', '--strict', default=False, action='store_true', help='Strict output')
     @cmd2.with_argparser(latency_parser)
     def do_tcpRTT(self, args):
+        #print ("%s, %s, %s, %s, %s, %s" % (bssid, channel, downRate, upRate, fq, signal))
+        print("Repetitions: %s, Timeout: %s, Port: %s" % (args.repeat, args.timeout, args.port))
         if args.strict:
             latency_results = measure_latency(host=args.host, runs=args.repeat, timeout=args.timeout, port=args.port)
             for i in latency_results:
