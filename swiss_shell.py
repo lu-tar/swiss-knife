@@ -7,6 +7,7 @@ import requests
 import platform
 import csv
 import calendar
+import webbrowser
 #import pathlib
 from pythonping import ping
 from datetime import datetime
@@ -27,6 +28,8 @@ RICH_CONSOLE = Console()
 CURRENT_TIME = datetime.now()
 CLOCK_TIME = CURRENT_TIME.strftime(CLOCK_FORMAT)
 IP_REGEX = "\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3}"
+FIREFOX_PATH="C:\\Program Files\\Mozilla Firefox\\firefox.exe"
+webbrowser.register('firefox', None,webbrowser.BackgroundBrowser(FIREFOX_PATH))
 
 # Pre cmd-loop
 # Banner ascii
@@ -348,6 +351,13 @@ class SwissKnife(cmd2.Cmd):
     def do_hello(self, args):
         swiss_func.hello_world(args.name, args.surname)
 
+    # Open a URL in a new tab in Firefox
+    fire_parser = cmd2.Cmd2ArgumentParser()
+    fire_parser.add_argument('-url', type=str, default='https://www.cyberciti.biz/faq/howto-run-firefox-from-the-command-line/', help='Opening tabs in Firefox from the commandline')
+    #fire_parser.add_argument('-surname', type=str, default='Spaceship', help='A nice fire to test functions')
+    @cmd2.with_argparser(fire_parser)
+    def do_fire(self, args):
+        webbrowser.get("firefox").open_new_tab(args.url)
 
     # Dividing commands in categories (help command)
     categorize((do_debug), "WLC debug parser")
