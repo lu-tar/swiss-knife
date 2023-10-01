@@ -261,11 +261,13 @@ class SwissKnife(cmd2.Cmd):
                 if args.loop == False:
                     for i in range(0, args.repeat):
                         CURRENT_TIME = datetime.now()
+                        CLOCK_TIME = CURRENT_TIME.strftime(CLOCK_FORMAT)
                         print(CLOCK_TIME, end =" ")
                         ping(args.address, verbose=True, count=1, interval=1)
                 else:
                     while True:
                         CURRENT_TIME = datetime.now()
+                        CLOCK_TIME = CURRENT_TIME.strftime(CLOCK_FORMAT)
                         print(CLOCK_TIME, end =" ")
                         ping(args.address, verbose=True, count=1, interval=1)
         else:
@@ -286,7 +288,7 @@ class SwissKnife(cmd2.Cmd):
                 print(f"{OPENAPPS_SCRIPT} does not exist.")
             except Exception as e:
                 print(f"An error occurred: {e}")
-            with MoonSpinner('CTRL+C to stop…') as bar:
+            with MoonSpinner('CTRL+C to stop openapps.bat') as bar:
                 for i in range(6):
                     sleep(0.5)
                     bar.next()
@@ -357,7 +359,10 @@ class SwissKnife(cmd2.Cmd):
     #fire_parser.add_argument('-surname', type=str, default='Spaceship', help='A nice fire to test functions')
     @cmd2.with_argparser(fire_parser)
     def do_fire(self, args):
-        webbrowser.get("firefox").open_new_tab(args.url)
+        try:
+            webbrowser.get("firefox").open_new_tab(args.url)
+        except Exception as e:
+            print(f"An error occurred: {e}")
 
     # Dividing commands in categories (help command)
     categorize((do_debug), "WLC debug parser")
@@ -365,7 +370,8 @@ class SwissKnife(cmd2.Cmd):
     categorize((do_binary, do_decimal, do_subnet), "Calc")
     categorize((do_putty), "SSH")
     categorize((do_grep), "Files")
-    categorize((do_time, do_openapps, do_hello), "Miscellanea")
+    categorize((do_fire, do_openapps), "Browser and apps")
+    categorize((do_time, do_hello), "Miscellanea")
 
 if __name__ == '__main__':
     import sys

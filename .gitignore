@@ -4,3 +4,4 @@ misc/
 __pycache__/
 swiss_conf.py
 *.spw
+openapps.bat
