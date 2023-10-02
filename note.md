@@ -170,3 +170,37 @@ print c.fetchall()
 # Insert a single item
 c.execute('INSERT INTO stocks VALUES (?,?,?,?,?)', ('2006-03-28', 'BUY', 'IBM', 1000, 45.00))
 ```
+
+## basic_complete
+```python
+import cmd2
+
+class MyCmd(cmd2.Cmd):
+    def __init__(self):
+        super().__init__()
+
+    def do_hello(self, args):
+        """Print a greeting."""
+        print("Hello, " + args)
+
+    def do_greet(self, args):
+        """Greet someone."""
+        print("Greeted: " + args)
+
+    def basic_complete(self, text, line, begidx, endidx):
+        """Custom tab completion for the 'hello' and 'greet' commands."""
+        if line.strip().startswith("hello"):
+            completions = ['world', 'there', 'cmd2']
+        elif line.strip().startswith("greet"):
+            completions = ['John', 'Alice', 'Bob']
+        else:
+            completions = []
+
+        return [comp for comp in completions if comp.startswith(text)]
+
+if __name__ == '__main__':
+    app = MyCmd()
+    app.cmdloop()
+```
+In this updated script, we've added a new command do_greet that takes a single argument and prints a greeting. We've also extended the basic_complete function to provide tab completion for both the do_hello and do_greet commands. The logic for completions is based on the prefix of the entered command (hello or greet).
+Now, when you run the script and use the do_greet command, you'll get tab completion suggestions based on the input.
