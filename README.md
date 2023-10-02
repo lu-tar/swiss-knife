@@ -1,48 +1,78 @@
-# swiss-knife 🇨🇭🔪
+# swiss-knife 🇨🇭🔪 a Command Line Utility
 A multipurpose shell for networking tasks written in Python cmd2.
 
-**To-do list**
+**Disclaimer:** This project is in beta and is primarily aimed at providing a command line interface for launching programs and scripts quickly, with the goal of minimizing mouse usage.
 
-🛠️ Fix 🛠️
-- [x] ipconfig calls with agnostic library like [psutil](https://pypi.org/project/psutil/)
-- [x] Every open file statements needs an exception
-- [x] Every API needs a exception for office SSL inspection
+## Features 🤖
+Swiss Knife offers the following features:
+- Binary/decimal conversion
+- Subnet calculator
+- MAC OUI identification using macvendors.com
+- Lightweight TCP and UDP port list browser
+- TCP latency ping
+- What's my IP address
+- Wi-Fi statistics
+- SSH integration with Putty
+- Text file parsing
 
-🚀 High priority 🚀
-- [x] Change local ip address from static to dynamic
-- [ ] SSH automation + template
-- [x] General Windows app automation maybe with os calls or PyAutogui or Selenium
-- [ ] [Nornir](https://nornir.readthedocs.io/en/latest/index.html) integration
-- [x] Search a file for a list of keyword like an automated grep + colored output
-  - [x] Debug files from Cisco 9800 (see debug_parser/udl)
-  - [ ] Debug files from AireOS controller
-  - [ ] Aruba / Cisco tech-support file
-- [ ] Tree listing files in a directory + test on remote like Sharepoint
-- [ ] Obsidian markdown integration + cheatsheet
-  - [ ] list all browser links
-  - [ ] [langchain](https://python.langchain.com/docs/get_started/introduction)
-- [x] Feature to spawn a cmd.exe process + a specific ping to leaving the swiss knife shell free
+In the future, the following features are planned for implementation:
+- Automation with Norninr or Netmiko
+- HTTP/FTP/SFTP/TFTP portable server
+- MD5/SHA256 calculator
+- Obsidian and markdown access
+- Port scanner
 
-🐌 Low priority 🐌
-- [ ] Port scanner
-- [ ] IP Geolocalization
-- [ ] Crack password 7 with [ciscot7](https://github.com/theevilbit/ciscot7) + other decryption tools
-- [ ] Generate encrypted notes on the fly
-- [ ] Simple todo list
-- [ ] File sharing with VPS / FTP automation
-- [ ] HTTP / FTP / SFTP / TFTP portable server
-  - [ ] [pyftpdlib](https://github.com/giampaolo/pyftpdlib)
-  - [ ] [PyPXE]9https://github.com/pypxe/PyPXE)
-- [ ] General Windows app automation maybe with PyAutogui or Selenium
-- [ ] Add templates to swiss-knife
-- [ ] MD5 / SHA256 calculator + [cyberchef](https://cyberchef.org/)
-- [ ] Ping plotter
-  - [ ] [Plot Pings in Python](https://github.com/ccampo133/Plot-Pings-in-Python)
-- [ ] Google Calendar integration with API
-- [ ] Time zones clocks
-- [ ] Set a timer
+## Getting Started 🚀
+To get started with Swiss Knife, follow these steps:
 
+1. Install Python: If you don't already have Python installed, download and install it from [python.org](https://www.python.org/downloads/).
 
-💡 Ideas 💡
-- [ ] [Is it possible to use a batch file to ping multiple IP addresses, each in its own window?](https://superuser.com/questions/1134344/is-it-possible-to-use-a-batch-file-to-ping-multiple-ip-addresses-each-in-its-ow)
-- [ ] [Networking-based python on GitHub](https://github.com/search?l=Python&q=networking&type=Repositories)
+2. Clone the repository: 
+```sh
+git clone https://github.com/lu-tar/swiss-knife.git
+```
+
+3. Navigate to the project directory, create a virtual environment and activate it
+```
+cd swiss-knife
+python -m venv venv
+```
+On Windows
+```
+venv\Scripts\activate
+```
+On Linux
+```
+source venv/bin/activate
+```
+
+4. Install the required packages using the requirements.txt file:
+```
+pip install -r requirements.txt
+```
+
+## How It Works 🛠️
+Swiss Knife operates like any other shell-like application, where commands require both mandatory and optional arguments. You can execute various functions by entering the appropriate commands.
+
+```
+ping 8.8.8.8
+[-h, --help]       [-spw, --spawn]
+[-r, --repeat]     [-t, --loop]
+```
+
+-h or --help list all the commands available
+
+```
+# tcpRTT wikipedia.org
+[-h, --help]       [-r, --repeat]     [-t, --timeout]
+[-p, --port]       [-s, --strict]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -p, --port [PORT]     Destination port
+  -r, --repeat [REPEAT]
+                        How many time measure_latency runs
+  -t, --timeout [TIMEOUT]
+                        Measure_latency timeout
+  -s, --strict          Strict output
+```
