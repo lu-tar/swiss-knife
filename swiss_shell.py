@@ -46,6 +46,7 @@ swiss_func.list_routes()
 class SwissKnife(cmd2.Cmd):
     prompt = "# "
     intro = ''
+
     # Pulling mac vendor from https://api.macvendors.com/FC:FB:FB:01:FA:21
     def do_macvendor(selg, args):
         try:
@@ -341,6 +342,7 @@ class SwissKnife(cmd2.Cmd):
     debug_parser = cmd2.Cmd2ArgumentParser()
     debug_parser.add_argument('-f', '--filename', type=str, default='debug_parser/debugTrace_1.txt', help='File path to debug trace file, default is debug_parser/debugTrace_1.txt')
     debug_parser.add_argument('-id', '--idname', type=str, default=CURRENT_TIME.strftime("%H%M%S"), help='Set the table name, default is the time as %H%M%S')
+    debug_parser.add_argument('-t', '--template', type=str, default=("state"), choices=["state", "EAP", "reasons", "association", "timeouts"], help='Select a template to parse the debug file in the db')
     @cmd2.with_argparser(debug_parser)
     def do_debug(self, args):
         swiss_func.debug_to_db(args.filename, args.idname)
@@ -349,9 +351,10 @@ class SwissKnife(cmd2.Cmd):
     hello_parser = cmd2.Cmd2ArgumentParser()
     hello_parser.add_argument('-name', type=str, default='Robot', help='A nice hello to test functions')
     hello_parser.add_argument('-surname', type=str, default='Spaceship', help='A nice hello to test functions')
+    hello_parser.add_argument('-t', '--template', type=str, default='red', choices=["red", "green", "blue"], help='Select a hello template')
     @cmd2.with_argparser(hello_parser)
     def do_hello(self, args):
-        swiss_func.hello_world(args.name, args.surname)
+        swiss_func.hello_world(args.name, args.surname, args.template)
 
     # Open a URL in a new tab in Firefox
     fire_parser = cmd2.Cmd2ArgumentParser()

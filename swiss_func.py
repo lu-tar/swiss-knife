@@ -68,17 +68,23 @@ def show_motd():
     return
 
 # Test function
-def hello_world(hello_world_surname, hello_world_name):
-    for e in range(1):
+def hello_world(hello_world_surname, hello_world_name, hello_world_template):
+    if hello_world_template == 'red':
         print(f"Hello world and {hello_world_surname} {hello_world_name}!")
+    if hello_world_template == 'green':
+        print(f"Howdy {hello_world_surname} {hello_world_name}!")    
+    if hello_world_template == 'blue':
+        print(f"Ciao {hello_world_surname} {hello_world_name}!")
 
 # See debug_parser in shell
 def debug_to_db(debug_filepath, debug_id_name):
     debug_dataset = []
-    #debug_filepath = 'debug_parser/debugTrace_1.txt'
+    # debug_filepath = 'debug_parser/debugTrace_1.txt'
     try:
         with open (debug_filepath,'r') as file:
             line_list = file.read().splitlines()
+            # Inserire qui un check per capire se il file e' AireOS o del 9800
+            # Cancellare/gestire la prima linea del file 9800
             for i in line_list:
                 iosxe_date = re.findall(IOSXE_DATE_REGEX, i)
                 iosxe_time = re.findall(IOSXE_TIME_REGEX, i)
@@ -92,12 +98,11 @@ def debug_to_db(debug_filepath, debug_id_name):
                 print(f"{debug_filepath} does not exist.")
     except Exception as e:
         print(f"An error occurred: {e}")
-    #print(debug_dataset)
+    # print(debug_dataset)
     
     conn = sqlite3.connect('db/debug_parser.db')
     cursor = conn.cursor()
-    cursor.execute(f'''
-        CREATE TABLE IF NOT EXISTS Table1 (
+    cursor.execute('''
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             id_name TEXT,
             date TEXT,
@@ -109,8 +114,30 @@ def debug_to_db(debug_filepath, debug_id_name):
         )
     ''')
     for data in debug_dataset:
-        cursor.execute('INSERT INTO Table1 (id_name, date, time, daemon, category, log_level, message) VALUES (?, ?, ?, ?, ?, ?, ?)', (debug_id_name, data[0], data[1], data[2], data[3], data[4], data[5]))
+        cursor.execute('''INSERT INTO Table1 (id_name, date, time, daemon, category, log_level, message) VALUES (?, ?, ?, ?, ?, ?, ?)''', 
+                       (debug_id_name, data[0], data[1], data[2], data[3], data[4], data[5])
+                       )
     conn.commit()
     conn.close()
 
     return
+
+# Testing database
+def testing_database():
+    conn = sqlite3.connect('db/debug_parser.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+            SELECT time, message FROM Table1 
+            WHERE id_name = 163226 
+            AND category LIKE "%client-orch-state%" 
+            OR category LIKE "%key%"
+            ''')
+    matching_rows = cursor.fetchall()
+    conn.commit()
+    conn.close()
+    for row in matching_rows:
+        print(row)
+    
+    return
+
+# testing_database()
