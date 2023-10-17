@@ -94,25 +94,16 @@ def debug_to_db(debug_filepath, debug_id_name):
                 end_log_message = re.search(IOSXE_LOG_LEVEL_REGEX, i).end()
         
                 debug_dataset.append([iosxe_date[0], iosxe_time[0], iosxe_daemon[0], iosxe_category[0], iosxe_log_level[0], i[end_log_message:]])
+        print("Parsed: " + debug_filepath)
     except FileNotFoundError:
-                print(f"{debug_filepath} does not exist.")
+        print(f"{debug_filepath} does not exist.")
     except Exception as e:
         print(f"An error occurred: {e}")
     # print(debug_dataset)
     
     conn = sqlite3.connect('db/debug_parser.db')
     cursor = conn.cursor()
-    cursor.execute('''
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            id_name TEXT,
-            date TEXT,
-            time TEXT,
-            daemon TEXT,
-            category TEXT,
-            log_level TEXT,
-            message TEXT
-        )
-    ''')
+    cursor.execute('''id INTEGER PRIMARY KEY AUTOINCREMENT, id_name TEXT, date TEXT, time TEXT, daemon TEXT, category TEXT, log_level TEXT, message TEXT)''')
     for data in debug_dataset:
         cursor.execute('''INSERT INTO Table1 (id_name, date, time, daemon, category, log_level, message) VALUES (?, ?, ?, ?, ?, ?, ?)''', 
                        (debug_id_name, data[0], data[1], data[2], data[3], data[4], data[5])
