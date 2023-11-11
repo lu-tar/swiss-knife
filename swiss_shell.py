@@ -300,12 +300,12 @@ class SwissKnife(cmd2.Cmd):
     # Grepping file for common strings. Logic change by args.
     file_parser = cmd2.Cmd2ArgumentParser()
     file_parser.add_argument(dest='filepath', type=str, help='File path to the debug file')
-    file_parser.add_argument('-t', '--template', type=str, default=("debug"), choices=["debug", "log", "techs", "associations", "timeouts", "reason"])
+    file_parser.add_argument('-t', '--template', type=str, default=("debug"), choices=["debug", "log", "techs", "associations", "timeouts", "reason", "state"])
     #grep_parser.add_argument('-fp', '--filepath', type=str, help='Just the filename')
     @cmd2.with_argparser(file_parser)
     def do_fp(self, args):
-        if args.template == 'debug':
-            search_patterns = swiss_func.compile_patterns(DEBUG_REGEX)
+        if args.template == 'state':
+            search_patterns = swiss_func.compile_patterns(CLIENT_STATE_REGEX)
         elif args.template == 'log':
             search_patterns = swiss_func.compile_patterns(LOG_REGEX)
         elif args.template == 'reason':
@@ -314,6 +314,8 @@ class SwissKnife(cmd2.Cmd):
             search_patterns = swiss_func.compile_patterns(TIMEOUT_REGEX)
         elif args.template == 'associations':
             search_patterns = swiss_func.compile_patterns(ASSOCIATION_REGEX)
+        elif args.template == 'debug':
+            search_patterns = swiss_func.compile_patterns(DEBUG_REGEX)
         else:
             print("Template non implementato")
         swiss_func.grep_file(args.filepath, search_patterns)
