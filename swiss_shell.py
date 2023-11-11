@@ -361,7 +361,7 @@ class SwissKnife(cmd2.Cmd):
 
     # Open a URL in a new tab in Firefox
     fire_parser = cmd2.Cmd2ArgumentParser()
-    fire_parser.add_argument('-url', type=str, default='https://www.cyberciti.biz/faq/howto-run-firefox-from-the-command-line/', help='Opening tabs in Firefox from the commandline')
+    fire_parser.add_argument(dest='url', type=str, default='https://www.cyberciti.biz/faq/howto-run-firefox-from-the-command-line/', help='Opening tabs in Firefox from the commandline')
     #fire_parser.add_argument('-surname', type=str, default='Spaceship', help='A nice fire to test functions')
     @cmd2.with_argparser(fire_parser)
     def do_fire(self, args):
