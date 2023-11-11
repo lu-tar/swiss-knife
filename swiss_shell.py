@@ -8,7 +8,7 @@ import platform
 import csv
 import calendar
 import webbrowser
-#import pathlib
+from pathlib import Path
 from pythonping import ping
 from datetime import datetime
 from rich.console import Console
@@ -299,24 +299,21 @@ class SwissKnife(cmd2.Cmd):
 
 
 
-    # Grepping file from the GREP_FOLDER pat; needs improvements
-    grep_parser = cmd2.Cmd2ArgumentParser()
-    grep_parser.add_argument(dest='value', type=str, help='String to find in file')
-    grep_parser.add_argument('-f', '--filename', type=str, help='Just the filename')
+    # Grepping file for common strings. Logic change by args.
+    file_parser = cmd2.Cmd2ArgumentParser()
+    file_parser.add_argument(dest='filepath', type=str, help='File path to the debug file')
+    file_parser.add_argument('-t', '--template', type=str, default=("debug"), choices=["debug", "log", "techs", "associations", "timeouts"])
     #grep_parser.add_argument('-fp', '--filepath', type=str, help='Just the filename')
-    @cmd2.with_argparser(grep_parser)
-    def do_grep(self, args):
-        print("File: " + str(GREP_FOLDER) + args.filename)
-        try:
-            with open(str(GREP_FOLDER) + "/" + args.filename, 'r') as file:
-                line_list = file.read().splitlines()
-            for i in line_list:
-                if args.value in i:
-                    print(i)
-        except FileNotFoundError:
-            print(f"The file {args.value} does not exist.")
-        except Exception as e:
-            print(f"An error occurred: {e}")
+    @cmd2.with_argparser(file_parser)
+    def do_fp(self, args):
+        if args.template == 'debug':
+            search_patterns = swiss_func.compile_patterns(DEBUG_REGEX)  # Sostituisci con le tue regex per controlli_1
+        elif args.template == 'log':
+            search_patterns = swiss_func.compile_patterns(LOG_REGEX)  # Sostituisci con le tue regex per controlli_2
+        else:
+            print("Template non implementato")
+        swiss_func.grep_file(args.filepath, search_patterns)
+        
 
     # Change ip on Windows with command line
     changeip_parser = cmd2.Cmd2ArgumentParser()
@@ -338,7 +335,7 @@ class SwissKnife(cmd2.Cmd):
         else:
             print(OPERATING_SYSTEM)
     
-    # WLC Debug parser
+    # WLC Debug parser with DB integration
     debug_parser = cmd2.Cmd2ArgumentParser()
     debug_parser.add_argument('-f', '--filename', type=str, default='debug_parser/debugTrace_1.txt', help='File path to debug trace file, default is debug_parser/debugTrace_1.txt')
     debug_parser.add_argument('-id', '--idname', type=str, default=CURRENT_TIME.strftime("%H%M%S"), help='Set the table name, default is the time as %H%M%S')
@@ -372,7 +369,7 @@ class SwissKnife(cmd2.Cmd):
     categorize((do_pub, do_iplist, do_macvendor, do_tcpRTT, do_wifistat, do_nslookup, do_portlist, do_ipcheck, do_ping, do_changeip), "Network")
     categorize((do_binary, do_decimal, do_subnet), "Calc")
     categorize((do_putty), "SSH")
-    categorize((do_grep), "Files")
+    categorize((do_fp), "Files")
     categorize((do_fire, do_openapps), "Browser and apps")
     categorize((do_time, do_hello), "Miscellanea")
 

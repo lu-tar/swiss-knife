@@ -4,18 +4,11 @@ import subprocess
 import re
 import sqlite3
 from datetime import datetime
+from pathlib import Path
 
 CLOCK_FORMAT = "%H%M%S"
 CURRENT_TIME = datetime.now()
 CLOCK_TIME = CURRENT_TIME.strftime(CLOCK_FORMAT)
-
-IOSXE_DATE_REGEX = '\d{4}/\d{2}/\d{2}'
-IOSXE_TIME_REGEX = '\d{2}:\d{2}:\d{2}\.\d+'
-IOSXE_DAEMON_REGEX = '\{[^}]+\}\{\d\}:'
-IOSXE_CATEGORY_REGEX = '\[[^\]]+\] \[[0-9]+\]:'
-IOSXE_LOG_LEVEL_REGEX = '\(([^)]+)\):'
-
-CISCO_DOTTED_MAC_REGEX = '\b[\dA-Za-z]{4}\b.\b[\dA-Za-z]{4}\b.\b[\dA-Za-z]{4}\b'
 
 def list_interfaces():
     try:
@@ -113,6 +106,24 @@ def debug_to_db(debug_filepath, debug_id_name):
 
     return
 
+# Dato un array di stringhe/regex in ingresso le compila ignorando il case
+def compile_patterns(pattern_strings):
+    return [re.compile(pattern, re.IGNORECASE) for pattern in pattern_strings]
+
+def grep_file(file_path, search_patterns):
+    try:
+        file_path = Path(file_path)
+        with file_path.open('r', encoding='utf-8') as file:
+            for line_number, line in enumerate(file, start=1):
+                for pattern in search_patterns:
+                    if pattern.search(line):
+                        print(f"{line_number}: {line.strip()}")
+                        break  # Esce dal ciclo se c'è una corrispondenza
+    except FileNotFoundError:
+        print(f"File not found: {file_path}")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
 # Testing database
 def testing_database():
     conn = sqlite3.connect('db/debug_parser.db')
@@ -130,5 +141,3 @@ def testing_database():
         print(row)
     
     return
-
-# testing_database()
