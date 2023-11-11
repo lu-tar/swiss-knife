@@ -6,8 +6,7 @@ OPERATING_SYSTEM = platform.system()
 CLOCK_FORMAT = "%H:%M:%S"
 # IP, local interfaces, public ip and default route
 IP_INTERFACES_IGNORE = ["lo"]
-IP_INTERFACES_INCLUDE = ["Ethernet", "Ethernet 2"]
-INTERNET_IP = str(requests.get("https://api.ipify.org?format=text").text)
+IP_INTERFACES_INCLUDE = ["Ethernet", "Ethernet 4"]
 LIST_ROUTE = False
 # Banner stuff
 IP_BANNER = False
@@ -25,3 +24,19 @@ PATH_TO_PUTTY = pathlib.Path(r"C:\Program Files\PuTTY\putty.exe")
 PATH_TO_PORTS_CSV = "csv/service-names-port-numbers.csv"
 OPENAPPS_SCRIPT = "openapps.bat"
 GREP_FOLDER = pathlib.Path(r"C:\Users\luca9\DEV\swiss-knife\csv")
+
+# Debug parser
+IOSXE_DATE_REGEX = '\d{4}/\d{2}/\d{2}'
+IOSXE_TIME_REGEX = '\d{2}:\d{2}:\d{2}\.\d+'
+IOSXE_DAEMON_REGEX = '\{[^}]+\}\{\d\}:'
+IOSXE_CATEGORY_REGEX = '\[[^\]]+\] \[[0-9]+\]:'
+IOSXE_LOG_LEVEL_REGEX = '\(([^)]+)\):'
+
+CISCO_DOTTED_MAC_REGEX = '\b[\dA-Za-z]{4}\b.\b[\dA-Za-z]{4}\b.\b[\dA-Za-z]{4}\b'
+
+# File parser regex patterns
+DEBUG_REGEX = ['client-orch-sm', 'client-orch-state']
+LOG_REGEX = ['warning', 'root', 'exceeded', "CPU"]
+REASON_REGEX = ['reason']
+TIMEOUT_REGEX = ['timeout']
+ASSOCIATION_REGEX = ['RSSI:']
