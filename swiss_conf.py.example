@@ -10,13 +10,15 @@ IP_INTERFACES_INCLUDE = ["Ethernet", "Ethernet 4"]
 LIST_ROUTE = False
 # Banner stuff
 IP_BANNER = False
-ASCII_BANNER = False
+ASCII_BANNER = True
 ASCII_ART = """
-    ,adPPYba,   88   ,d8
-    I8[         88 ,a8'
-    `Y8ba,      8888[
-        ]8I     88`'Yba,
-___'taYbbdP'    88   `Y8a  v1.0______________________________________
+
+                    ██                      ▀██                ██    ▄▀█▄         
+ ▄▄▄▄  ▄▄▄ ▄▄▄ ▄▄▄ ▄▄▄   ▄▄▄▄   ▄▄▄▄         ██  ▄▄  ▄▄ ▄▄▄   ▄▄▄  ▄██▄     ▄▄▄▄  
+██▄ ▀   ██  ██  █   ██  ██▄ ▀  ██▄ ▀         ██ ▄▀    ██  ██   ██   ██    ▄█▄▄▄██ 
+▄ ▀█▄▄   ███ ███    ██  ▄ ▀█▄▄ ▄ ▀█▄▄  ████  ██▀█▄    ██  ██   ██   ██    ██      
+█▀▄▄█▀    █   █    ▄██▄ █▀▄▄█▀ █▀▄▄█▀       ▄██▄ ██▄ ▄██▄ ██▄ ▄██▄ ▄██▄    ▀█▄▄▄▀ __v2.0
+                                                                                                                                                                  
 """
 # Paths to files or programs
 # An empty or incorrect path generates app startup latency
@@ -35,8 +37,9 @@ IOSXE_LOG_LEVEL_REGEX = '\(([^)]+)\):'
 CISCO_DOTTED_MAC_REGEX = '\b[\dA-Za-z]{4}\b.\b[\dA-Za-z]{4}\b.\b[\dA-Za-z]{4}\b'
 
 # File parser regex patterns
-DEBUG_REGEX = ['client-orch-sm', 'client-orch-state']
+CLIENT_STATE_REGEX = ['client-orch-sm', 'client-orch-state']
 LOG_REGEX = ['warning', 'root', 'exceeded', "CPU"]
 REASON_REGEX = ['reason']
-TIMEOUT_REGEX = ['timeout']
+TIMEOUT_REGEX = ['_TIMEOUT']
 ASSOCIATION_REGEX = ['RSSI:']
+DEBUG_REGEX = ['Re-Association received', 'Association received', 'EAP key', 'S_IPLEARN_COMPLETE', 'reason:', 'S_CO_IP_LEARN_IN_PROGRESS -> S_CO_RUN']

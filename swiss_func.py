@@ -3,19 +3,24 @@ import psutil
 import subprocess
 import re
 import sqlite3
+import socket
 from datetime import datetime
 from pathlib import Path
+from rich.panel import Panel
+from rich.panel import Style
+from rich import print
 
-CLOCK_FORMAT = "%H%M%S"
+CLOCK_FORMAT = "%H:%M:%S"
 CURRENT_TIME = datetime.now()
 CLOCK_TIME = CURRENT_TIME.strftime(CLOCK_FORMAT)
 
-def list_interfaces():
-    try:
-        print("Public IP: " + requests.get("https://api.ipify.org?format=text").text)
-    except Exception as e:
-        print(f"Request to api.ipify.org: {e}")
+try:
+    PUBLIC_IP = requests.get("https://api.ipify.org?format=text").text
+except Exception as e:
+    PUBLIC_IP = ""
 
+def list_interfaces():
+    print(PUBLIC_IP)
     # Ciclio il dictionary psutil.net_if_addrs()
     for nic, addrs in psutil.net_if_addrs().items():
         # Per ogni interfaccia presente IP_INTERFACES_INCLUDE 
@@ -32,16 +37,17 @@ def list_interfaces():
                         print(addr.netmask)
             else:
                 pass
-    return
 
 def list_routes():
+
     if LIST_ROUTE == True:
         if OPERATING_SYSTEM == "Windows":
             route_print = subprocess.run(['route', 'print', '0.0.0.0'], stdout=subprocess.PIPE)
             decode_route_print = route_print.stdout.decode('utf-8', 'ignore').splitlines()
             for i in decode_route_print:
                 if '0.0.0.0' in i:
-                    print("Default route: " + i)
+                    #print(Panel(ASCII_ART, title="Welcome to swiss-knife", subtitle="Version 2.0", border_style=Style(color="#22a6b3")))
+                    print(Panel(i, title="Default route", border_style=Style(color="#7ed6df")))
         elif OPERATING_SYSTEM == "Linux":
             route_print = subprocess.run(['ip', 'route'], stdout=subprocess.PIPE)
             decode_route_print = route_print.stdout.decode('utf-8', 'ignore').splitlines()
@@ -54,8 +60,25 @@ def list_routes():
         pass
 
 def show_motd():
+    hostname = socket.gethostname()
+    active_users = psutil.users()
+    user_names = [user.name for user in active_users]
+
+    ASCII_ART = f"""
+                        ██                          User: {user_names}
+     ▄▄▄▄  ▄▄▄ ▄▄▄ ▄▄▄ ▄▄▄   ▄▄▄▄   ▄▄▄▄            Host: {hostname}
+    ██▄ ▀   ██  ██  █   ██  ██▄ ▀  ██▄ ▀            OS: {OPERATING_SYSTEM}
+    ▄ ▀█▄▄   ███ ███    ██  ▄ ▀█▄▄ ▄ ▀█▄▄           IP_INTERFACES_IGNORE: {IP_INTERFACES_IGNORE}
+    █▀▄▄█▀    █   █    ▄██▄ █▀▄▄█▀ █▀▄▄█▀           IP_INTERFACES_INCLUDE: {IP_INTERFACES_INCLUDE}
+                                                    Putty path: {PATH_TO_PUTTY}
+    	▀██                ██    ▄▀█▄               Public IP: {PUBLIC_IP}
+    	 ██  ▄▄  ▄▄ ▄▄▄   ▄▄▄  ▄██▄     ▄▄▄▄        Clock: {CLOCK_TIME}
+    	 ██ ▄▀    ██  ██   ██   ██    ▄█▄▄▄██       
+    	 ██▀█▄    ██  ██   ██   ██    ██            Author: https://github.com/lu-tar
+    	▄██▄ ██▄ ▄██▄ ██▄ ▄██▄ ▄██▄    ▀█▄▄▄▀       
+    """
     if ASCII_BANNER == True:
-        print(ASCII_ART)
+        print(Panel(ASCII_ART, title="Welcome to swiss-knife", subtitle="Version 2.0", border_style=Style(color="#22a6b3")))
     else:
         pass
     return
