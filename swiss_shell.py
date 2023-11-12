@@ -365,6 +365,20 @@ class SwissKnife(cmd2.Cmd):
     #fire_parser.add_argument('-surname', type=str, default='Spaceship', help='A nice fire to test functions')
     @cmd2.with_argparser(fire_parser)
     def do_fire(self, args):
+        '''
+        - https://ticket.lantechlongwave.it/HDAPortal/
+        - https://dashboard.meraki.com/
+        - https://translate.google.it/
+        - https://www.linkedin.com/feed/
+        - https://mycase.cloudapps.cisco.com/case
+        - https://chat.openai.com/
+        - https://erm.zucchetti.it/ERM/
+        - https://mail.google.com/
+        - https://software.cisco.com/download/home/
+        - https://app.lantechlongwave.it/tec/Clienti
+        - https://asp.arubanetworks.com/
+        - https://app2-eu.central.arubanetworks.com/
+        '''
         try:
             webbrowser.get("firefox").open_new_tab(args.url)
         except Exception as e:
