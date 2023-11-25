@@ -198,14 +198,15 @@ class SwissKnife(cmd2.Cmd):
         CURRENT_TIME = datetime.now()
         CLOCK_TIME = CURRENT_TIME.strftime("%H:%M:%S")
         netsh_wifi_stats = subprocess.run(['netsh', 'wlan', 'show', 'interfaces'], stdout=subprocess.PIPE)
-        outStr = netsh_wifi_stats.stdout.decode('utf-8', 'ignore')
-        if "disconnessa" in outStr:
+        out_string = netsh_wifi_stats.stdout.decode('utf-8', 'ignore')
+        if "disconnessa" in out_string:
             print("No Wi-fi connection")
-        elif "Non disponibile" in outStr:
-            print("No Wi-fi connection")
+        # Conflitto con stringa "Stato rete ospitata  : Non disponibile"
+        #elif "Non disponibile" in out_string:
+        #    print("No Wi-fi connection")
         else:
             # Need improvments
-            for e in outStr.splitlines():
+            for e in out_string.splitlines():
                 if "BSSID" in e:
                     bssid = e[29:]
                 elif "Canale" in e:
@@ -223,10 +224,10 @@ class SwissKnife(cmd2.Cmd):
             # Wifi statistics table from netsh
             wifi_table = Table(title="Wi-Fi statistics from netsh")
             # Columns
-            wifi_table.add_column("⏱️", justify="center", style="white")
+            wifi_table.add_column("Time", justify="center", style="white")
             wifi_table.add_column("BSSID", justify="center", style="white")
-            wifi_table.add_column("Download rate", justify="center", style="yellow")
-            wifi_table.add_column("Upload rate", justify="center", style="yellow")
+            wifi_table.add_column("Download", justify="center", style="yellow")
+            wifi_table.add_column("Upload", justify="center", style="yellow")
             wifi_table.add_column("Protocol", justify="center", style="green")
             wifi_table.add_column("Channel", justify="center", style="green")
             wifi_table.add_column("Signal", justify="center", style="green")
