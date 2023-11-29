@@ -9,6 +9,8 @@ from pathlib import Path
 from rich.panel import Panel
 from rich.panel import Style
 from rich import print
+import logging
+import socketserver
 
 CLOCK_FORMAT = "%H:%M:%S"
 CURRENT_TIME = datetime.now()
@@ -18,6 +20,13 @@ try:
     PUBLIC_IP = requests.get("https://api.ipify.org?format=text").text
 except Exception as e:
     PUBLIC_IP = ""
+
+class SyslogUDPHandler(socketserver.BaseRequestHandler):
+	def handle(self):
+		data = bytes.decode(self.request[0].strip())
+		socket = self.request[1]
+		print( "%s : " % self.client_address[0], str(data))
+		logging.info(str(data))
 
 def list_interfaces():
     print(PUBLIC_IP)
@@ -164,3 +173,13 @@ def testing_database():
         print(row)
     
     return
+
+def start_syslog(syslog_logfile, syslog_host, syslog_port):
+    logging.basicConfig(level=logging.INFO, format='%(message)s', datefmt='', filename=syslog_logfile, filemode='a')
+    try:
+        server = socketserver.UDPServer((syslog_host, syslog_port), SyslogUDPHandler)
+        server.serve_forever(poll_interval=0.5)
+    except(IOError, SystemExit):
+        raise
+    except KeyboardInterrupt:
+        print ("Crtl+C Pressed. Shutting down.")

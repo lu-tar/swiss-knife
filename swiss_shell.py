@@ -389,6 +389,15 @@ class SwissKnife(cmd2.Cmd):
         except Exception as e:
             print(f"An error occurred: {e}")
 
+    # Logging command ------------------------------------------------------------------------------------------
+    syslog_parser = cmd2.Cmd2ArgumentParser()
+    syslog_parser.add_argument('-l', '--logfile', type=str, default=LOG_FILE, help='Logging to file')
+    syslog_parser.add_argument('-s', '--loghost', type=str, default="0.0.0.0", help='Define syslog server host')
+    syslog_parser.add_argument('-p', '--logport', type=int, default=LOG_PORT, help='Define syslog port')
+    @cmd2.with_argparser(syslog_parser)
+    def do_syslog(self, args):
+        swiss_func.start_syslog(args.logfile, args.loghost, args.logport)
+
     # Dividing commands in categories (help command)
     categorize((do_debug), "WLC debug parser")
     categorize((do_pub, do_iplist, do_macvendor, do_tcpRTT, do_wifistat, do_nslookup, do_portlist, do_ipcheck, do_ping, do_changeip), "Network")
@@ -397,6 +406,7 @@ class SwissKnife(cmd2.Cmd):
     categorize((do_fp), "Files")
     categorize((do_fire, do_openapps), "Browser and apps")
     categorize((do_time, do_hello), "Miscellanea")
+    categorize((do_syslog), "Server")
 
 if __name__ == '__main__':
     import sys
