@@ -391,12 +391,12 @@ class SwissKnife(cmd2.Cmd):
 
     # Logging command ------------------------------------------------------------------------------------------
     syslog_parser = cmd2.Cmd2ArgumentParser()
-    syslog_parser.add_argument('-l', '--logfile', type=str, default=LOG_FILE, help='Logging to file')
-    syslog_parser.add_argument('-s', '--loghost', type=str, default="0.0.0.0", help='Define syslog server host')
-    syslog_parser.add_argument('-p', '--logport', type=int, default=LOG_PORT, help='Define syslog port')
+    syslog_parser.add_argument('-l', type=str, default=LOG_FILE, help='Logging to file')
+    syslog_parser.add_argument('-s', type=str, default="0.0.0.0", help='Define syslog server host')
+    syslog_parser.add_argument('-p', type=int, default=LOG_PORT, help='Define syslog port')
     @cmd2.with_argparser(syslog_parser)
     def do_syslog(self, args):
-        swiss_func.start_syslog(args.logfile, args.loghost, args.logport)
+        swiss_func.start_syslog(args.l, args.s, args.p)
 
     # Dividing commands in categories (help command)
     categorize((do_debug), "WLC debug parser")

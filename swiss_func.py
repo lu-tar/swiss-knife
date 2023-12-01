@@ -142,6 +142,7 @@ def debug_to_db(debug_filepath, debug_id_name):
 def compile_patterns(pattern_strings):
     return [re.compile(pattern, re.IGNORECASE) for pattern in pattern_strings]
 
+# Search in file
 def grep_file(file_path, search_patterns):
     try:
         file_path = Path(file_path)
@@ -155,6 +156,17 @@ def grep_file(file_path, search_patterns):
         print(f"File not found: {file_path}")
     except Exception as e:
         print(f"An error occurred: {e}")
+
+# Syslog
+def start_syslog(syslog_logfile, syslog_host, syslog_port):
+    logging.basicConfig(level=logging.INFO, format='%(message)s', datefmt='', filename=syslog_logfile, filemode='a')
+    try:
+        server = socketserver.UDPServer((syslog_host, syslog_port), SyslogUDPHandler)
+        server.serve_forever(poll_interval=0.5)
+    except(IOError, SystemExit):
+        raise
+    except KeyboardInterrupt:
+        print ("Crtl+C Pressed. Shutting down.")
 
 # Testing database
 def testing_database():
@@ -173,13 +185,3 @@ def testing_database():
         print(row)
     
     return
-
-def start_syslog(syslog_logfile, syslog_host, syslog_port):
-    logging.basicConfig(level=logging.INFO, format='%(message)s', datefmt='', filename=syslog_logfile, filemode='a')
-    try:
-        server = socketserver.UDPServer((syslog_host, syslog_port), SyslogUDPHandler)
-        server.serve_forever(poll_interval=0.5)
-    except(IOError, SystemExit):
-        raise
-    except KeyboardInterrupt:
-        print ("Crtl+C Pressed. Shutting down.")

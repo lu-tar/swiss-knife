@@ -4,5 +4,6 @@ misc/
 __pycache__/
 swiss_conf.py
 *.spw
+*.log
 openapps.bat
 debugTrace_845f.04e7.d557.txt
