@@ -7,10 +7,10 @@ CLOCK_FORMAT = "%H:%M:%S"
 # IP, local interfaces, public ip and default route
 IP_INTERFACES_IGNORE = ["lo"]
 IP_INTERFACES_INCLUDE = ["Wi-Fi 4"]
-LIST_ROUTE = True
+LIST_ROUTE = False
 # Banner stuff
 IP_BANNER = False
-ASCII_BANNER = True
+ASCII_BANNER = False
 
 # Paths to files or programs
 # An empty or incorrect path generates app startup latency
@@ -35,3 +35,8 @@ REASON_REGEX = ['reason']
 TIMEOUT_REGEX = ['_TIMEOUT']
 ASSOCIATION_REGEX = ['RSSI:']
 DEBUG_REGEX = ['Re-Association received', 'Association received', 'EAP key', 'S_IPLEARN_COMPLETE', 'reason:', 'S_CO_IP_LEARN_IN_PROGRESS -> S_CO_RUN']
+
+# File logging
+LOG_FILE = 'log/syslog.log'
+LOG_HOST = "0.0.0.0"
+LOG_PORT = 514
