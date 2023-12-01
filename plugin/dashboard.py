@@ -1,28 +1,30 @@
-from textual.app import App, ComposeResult, RenderResult
-from textual.containers import Horizontal, Vertical
-from textual.widget import Widget
-from textual.widgets import Static
+from textual.app import App, ComposeResult
+from textual.containers import Container, Horizontal, VerticalScroll
+from textual.widgets import Header, Static
 
-# Primo widget
-class Hello(Widget):
-    """Display a greeting."""
-    BORDER_TITLE = "Hello Widget"
-    def render(self) -> RenderResult:
-        return "Hello, [b]World[/b]!"
+# Test layout + widget
+class CombiningLayoutsExample(App):
+    CSS_PATH = "combining_layouts.tcss"
 
-# Classe di base
-class UtilityContainersExample(App):
-    CSS_PATH = "utility_containers.tcss"
     def compose(self) -> ComposeResult:
-        with Horizontal():
-            with Vertical(classes="column"):
-                yield Static("One")
-                yield Static("Two")
-            with Vertical(classes="column"):
-                yield Static("Three")
-                yield Static("Four")
+        yield Header()
+        with Container(id="app-grid"):
+            with VerticalScroll(id="left-pane"):
+                for number in range(15):
+                    yield Static(f"Vertical layout, child {number}")
+            with Horizontal(id="top-right"):
+                yield Static("Horizontally")
+                yield Static("Positioned")
+                yield Static("Children")
+                yield Static("Here")
+            with Container(id="bottom-right"):
+                yield Static("This")
+                yield Static("panel")
+                yield Static("is")
+                yield Static("using")
+                yield Static("grid layout!", id="bottom-right-final")
 
 
 if __name__ == "__main__":
-    app = UtilityContainersExample()
+    app = CombiningLayoutsExample()
     app.run()
