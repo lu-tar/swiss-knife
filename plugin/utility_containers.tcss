@@ -1,0 +1,10 @@
+Static {
+    content-align: center middle;
+    background: #282a36;
+    border: solid snow;
+    height: 1fr;
+}
+
+.column {
+    width: 1fr;
+}
