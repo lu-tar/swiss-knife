@@ -4,6 +4,7 @@ import subprocess
 import re
 import sqlite3
 import socket
+import os
 from datetime import datetime
 from pathlib import Path
 from rich.panel import Panel
@@ -185,3 +186,45 @@ def testing_database():
         print(row)
     
     return
+# Fuzzy search / grep / sed application
+def fuzzy_app():
+    FOLDERS = ["/home/luca/dev/swiss-knife/debug_parser/"]
+    FILE_LIST = []
+    print("┌──── FUZZY APP ────────────────────────────────────────────────────────────────┤")
+    print("├ Indexing files and folders ...")
+    print("├ q is for quitting, grep for path search and grepp for file inspection ...")
+    for folder_path in FOLDERS:
+        for root, dirs, files in os.walk(Path(folder_path)):
+            for file in files:
+                #print(os.path.join(root, file))
+                filename = os.path.join(root, file)
+                FILE_LIST.append(filename)
+    # ----- sub-shell------
+    while True:
+        input_app = input("├ ")
+        if input_app == "q":
+            break
+        if input_app == "cane":
+            print("🐶")
+        if input_app == "ls":
+            for e in FILE_LIST:
+                print(e)
+        if input_app == "grep":
+            # ----- grep mode sub-sub-shell------
+            while True:
+                grep_input = input("├─ grep ")
+                for e in FILE_LIST:
+                    if grep_input in e.lower():
+                        print(e)
+                if grep_input == "q":
+                    break
+        """
+        if input_app == "grepp":
+            # ----- grepp mode ------
+                grep_input = input("├─ grepp ")
+                for e in FILE_LIST:
+                    if grep_input in e:
+                        print(e)
+                if grep_input == "quit":
+                    break
+        """

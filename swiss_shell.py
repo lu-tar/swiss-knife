@@ -397,6 +397,25 @@ class SwissKnife(cmd2.Cmd):
     @cmd2.with_argparser(syslog_parser)
     def do_syslog(self, args):
         swiss_func.start_syslog(args.l, args.s, args.p)
+    
+    # Fuzzy application ----------------------------------------------------------------------------------------
+    # Fuzzy search like everithing + grep files
+    fuzzy_parser = cmd2.Cmd2ArgumentParser()
+    @cmd2.with_argparser(fuzzy_parser)
+    def do_fuzzy(self, _): 
+        swiss_func.fuzzy_app()
+     
+    exit_parser = cmd2.Cmd2ArgumentParser()
+    @cmd2.with_argparser(exit_parser)
+    def do_exit(self, _): 
+        print("Goodbye :) ")
+        quit()
+    
+    q_parser = cmd2.Cmd2ArgumentParser()
+    @cmd2.with_argparser(q_parser)
+    def do_q(self, _): 
+        print("Goodbye :) ")
+        quit()
 
     # Dividing commands in categories (help command)
     categorize((do_debug), "WLC debug parser")
