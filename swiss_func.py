@@ -188,12 +188,11 @@ def testing_database():
     return
 # Fuzzy search / grep / sed application
 def fuzzy_app():
-    FOLDERS = ["C:/Users/luca9/DEV/"]
     FILE_LIST = []
     print("┌──── FUZZY APP ────────────────────────────────────────────────────────────────┤")
     print("├ Indexing files and folders ...")
     print("├ q is for quitting, grep for path search and grepp for file inspection ...")
-    for folder_path in FOLDERS:
+    for folder_path in FUZZY_SEARCH_FOLDERS:
         for root, dirs, files in os.walk(Path(folder_path)):
             for file in files:
                 #print(os.path.join(root, file))
