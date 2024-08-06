@@ -38,6 +38,7 @@ from progress.spinner import MoonSpinner
 
 from swiss_conf import *
 import swiss_func
+import swiss_automation
 
 OPERATING_SYSTEM = platform.system()
 RICH_CONSOLE = Console()
