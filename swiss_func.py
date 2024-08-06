@@ -188,7 +188,7 @@ def testing_database():
     return
 # Fuzzy search / grep / sed application
 def fuzzy_app():
-    FOLDERS = ["/home/luca/dev/swiss-knife/debug_parser/"]
+    FOLDERS = ["C:/Users/luca9/DEV/"]
     FILE_LIST = []
     print("┌──── FUZZY APP ────────────────────────────────────────────────────────────────┤")
     print("├ Indexing files and folders ...")
@@ -213,11 +213,13 @@ def fuzzy_app():
             # ----- grep mode sub-sub-shell------
             while True:
                 grep_input = input("├─ grep ")
-                for e in FILE_LIST:
-                    if grep_input in e.lower():
-                        print(e)
+
                 if grep_input == "q":
                     break
+                else:
+                    for e in FILE_LIST:
+                        if grep_input in e.lower():
+                            print(e)
         """
         if input_app == "grepp":
             # ----- grepp mode ------
