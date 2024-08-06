@@ -4,11 +4,14 @@ import subprocess
 import re
 import sqlite3
 import socket
+import os
 from datetime import datetime
 from pathlib import Path
 from rich.panel import Panel
 from rich.panel import Style
 from rich import print
+import logging
+import socketserver
 
 CLOCK_FORMAT = "%H:%M:%S"
 CURRENT_TIME = datetime.now()
@@ -18,6 +21,13 @@ try:
     PUBLIC_IP = requests.get("https://api.ipify.org?format=text").text
 except Exception as e:
     PUBLIC_IP = ""
+
+class SyslogUDPHandler(socketserver.BaseRequestHandler):
+	def handle(self):
+		data = bytes.decode(self.request[0].strip())
+		socket = self.request[1]
+		print( "%s : " % self.client_address[0], str(data))
+		logging.info(str(data))
 
 def list_interfaces():
     print(PUBLIC_IP)
@@ -133,6 +143,7 @@ def debug_to_db(debug_filepath, debug_id_name):
 def compile_patterns(pattern_strings):
     return [re.compile(pattern, re.IGNORECASE) for pattern in pattern_strings]
 
+# Search in file
 def grep_file(file_path, search_patterns):
     try:
         file_path = Path(file_path)
@@ -146,6 +157,17 @@ def grep_file(file_path, search_patterns):
         print(f"File not found: {file_path}")
     except Exception as e:
         print(f"An error occurred: {e}")
+
+# Syslog
+def start_syslog(syslog_logfile, syslog_host, syslog_port):
+    logging.basicConfig(level=logging.INFO, format='%(message)s', datefmt='', filename=syslog_logfile, filemode='a')
+    try:
+        server = socketserver.UDPServer((syslog_host, syslog_port), SyslogUDPHandler)
+        server.serve_forever(poll_interval=0.5)
+    except(IOError, SystemExit):
+        raise
+    except KeyboardInterrupt:
+        print ("Crtl+C Pressed. Shutting down.")
 
 # Testing database
 def testing_database():
@@ -164,3 +186,45 @@ def testing_database():
         print(row)
     
     return
+# Fuzzy search / grep / sed application
+def fuzzy_app():
+    FOLDERS = ["/home/luca/dev/swiss-knife/debug_parser/"]
+    FILE_LIST = []
+    print("┌──── FUZZY APP ────────────────────────────────────────────────────────────────┤")
+    print("├ Indexing files and folders ...")
+    print("├ q is for quitting, grep for path search and grepp for file inspection ...")
+    for folder_path in FOLDERS:
+        for root, dirs, files in os.walk(Path(folder_path)):
+            for file in files:
+                #print(os.path.join(root, file))
+                filename = os.path.join(root, file)
+                FILE_LIST.append(filename)
+    # ----- sub-shell------
+    while True:
+        input_app = input("├ ")
+        if input_app == "q":
+            break
+        if input_app == "cane":
+            print("🐶")
+        if input_app == "ls":
+            for e in FILE_LIST:
+                print(e)
+        if input_app == "grep":
+            # ----- grep mode sub-sub-shell------
+            while True:
+                grep_input = input("├─ grep ")
+                for e in FILE_LIST:
+                    if grep_input in e.lower():
+                        print(e)
+                if grep_input == "q":
+                    break
+        """
+        if input_app == "grepp":
+            # ----- grepp mode ------
+                grep_input = input("├─ grepp ")
+                for e in FILE_LIST:
+                    if grep_input in e:
+                        print(e)
+                if grep_input == "quit":
+                    break
+        """

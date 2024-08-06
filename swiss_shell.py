@@ -1,5 +1,21 @@
 #!/usr/bin/env python
+#
+#
+# 
+#                   ▀██     
+#             ▄▄▄▄   ██  ▄▄ 
+#            ██▄ ▀   ██ ▄▀   
+#            ▄ ▀█▄▄  ██▀█▄   
+#            █▀▄▄█▀ ▄██▄ ██▄
+#    ---------swiss-knife---------
+#   Author: https://github.com/lu-tar
+#
+#
+#
+#
+#
 import cmd2
+import os
 from cmd2  import categorize
 import subprocess
 import re
@@ -31,18 +47,6 @@ IP_REGEX = "\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3}"
 FIREFOX_PATH="C:\\Program Files\\Mozilla Firefox\\firefox.exe"
 webbrowser.register('firefox', None,webbrowser.BackgroundBrowser(FIREFOX_PATH))
 
-# Pre cmd-loop
-# Banner ascii
-swiss_func.show_motd()
-# IP list using psutils
-if IP_BANNER == True:
-    swiss_func.list_interfaces()
-else:
-    pass
-# Subprocess the shell command like route print or ip route
-swiss_func.list_routes()
-
-# Cmd loop app
 class SwissKnife(cmd2.Cmd):
     prompt = "# "
     intro = ''
@@ -54,7 +58,7 @@ class SwissKnife(cmd2.Cmd):
         except Exception as e:
             print(f"An error occurred: {e}")
 
-    # Print current time and a small calendar
+    # Print current time and a small calendar ------------------------------------------------
     def do_time(self, _):
         CURRENT_TIME = datetime.now()
         year = CURRENT_TIME.strftime("%Y")
@@ -62,7 +66,7 @@ class SwissKnife(cmd2.Cmd):
         print(CLOCK_TIME)
         print(calendar.month(int(year), int(month)))
 
-    # nslookup of a host
+    # nslookup of a host ----------------------------------------------------------------------
     nslookup_parser = cmd2.Cmd2ArgumentParser()
     nslookup_parser.add_argument(dest='value', type=str, help='DNS lookup of a hostname')
     @cmd2.with_argparser(nslookup_parser)
@@ -70,7 +74,7 @@ class SwissKnife(cmd2.Cmd):
         nslookup_cmd = subprocess.run(["nslookup", args.value], stdout=subprocess.PIPE)
         print(nslookup_cmd.stdout.decode('utf-8', 'ignore'))
 
-    # subnet printer from decimal value
+    # subnet printer from decimal value -------------------------------------------------------
     subnet_parser = cmd2.Cmd2ArgumentParser()
     subnet_parser.add_argument(dest='value', type=int, help='From integer to subnet')
     @cmd2.with_argparser(subnet_parser)
@@ -87,7 +91,7 @@ class SwissKnife(cmd2.Cmd):
             fourth_oct = int(bin_train[24:32],2)
             print ("%s.%s.%s.%s" % (first_oct, second_oct, third_oct, fourth_oct))
 
-    # ipaddress — IPv4/IPv6 manipulation library
+    # ipaddress — IPv4/IPv6 manipulation library -----------------------------------------------
     ipcheck_parser = cmd2.Cmd2ArgumentParser()
     ipcheck_parser.add_argument(dest='ipcheck', type=str, nargs='?', help='Apply is_multicast, is_private ecc')
     @cmd2.with_argparser(ipcheck_parser)
@@ -118,7 +122,7 @@ class SwissKnife(cmd2.Cmd):
         else:
             subprocess.Popen([PATH_TO_PUTTY, "-ssh", args.host, "-l", args.username, "-pw", args.password, "-P", args.port], stdout=subprocess.PIPE)
 
-    # Binary to decimal conversion
+    # Binary to decimal conversion ----------------------------------------------------------------
     decimal_parser = cmd2.Cmd2ArgumentParser()
     decimal_parser.add_argument(dest='value', type=int, help='Binary to decimal conversion')
     @cmd2.with_argparser(decimal_parser)
@@ -132,14 +136,14 @@ class SwissKnife(cmd2.Cmd):
             power = power*2
         print(decimal)
 
-    # Decimal to binary conversion
+    # Decimal to binary conversion ----------------------------------------------------------------
     binary_parser = cmd2.Cmd2ArgumentParser()
     binary_parser.add_argument(dest='value', type=int, help='Decimal to binary conversion')
     @cmd2.with_argparser(binary_parser)
     def do_binary(self, args):
         print(bin(args.value)[2:])
 
-    # Port/protocol finder
+    # Port/protocol finder ------------------------------------------------------------------------
     portlist_parser = cmd2.Cmd2ArgumentParser()
     portlist_parser.add_argument(dest='value', help='Port or protocol')
     @cmd2.with_argparser(portlist_parser)
@@ -189,19 +193,20 @@ class SwissKnife(cmd2.Cmd):
     def do_iplist(self, _): 
         swiss_func.list_interfaces()
 
-    # Show wifi statistics from netsh
+    # Show wifi statistics from netsh -----------------------------------------------------------
     def do_wifistat(self, args):
         CURRENT_TIME = datetime.now()
         CLOCK_TIME = CURRENT_TIME.strftime("%H:%M:%S")
         netsh_wifi_stats = subprocess.run(['netsh', 'wlan', 'show', 'interfaces'], stdout=subprocess.PIPE)
-        outStr = netsh_wifi_stats.stdout.decode('utf-8', 'ignore')
-        if "disconnessa" in outStr:
+        out_string = netsh_wifi_stats.stdout.decode('utf-8', 'ignore')
+        if "disconnessa" in out_string:
             print("No Wi-fi connection")
-        elif "Non disponibile" in outStr:
-            print("No Wi-fi connection")
+        # Conflitto con stringa "Stato rete ospitata  : Non disponibile"
+        #elif "Non disponibile" in out_string:
+        #    print("No Wi-fi connection")
         else:
             # Need improvments
-            for e in outStr.splitlines():
+            for e in out_string.splitlines():
                 if "BSSID" in e:
                     bssid = e[29:]
                 elif "Canale" in e:
@@ -219,10 +224,10 @@ class SwissKnife(cmd2.Cmd):
             # Wifi statistics table from netsh
             wifi_table = Table(title="Wi-Fi statistics from netsh")
             # Columns
-            wifi_table.add_column("⏱️", justify="center", style="white")
+            wifi_table.add_column("Time", justify="center", style="white")
             wifi_table.add_column("BSSID", justify="center", style="white")
-            wifi_table.add_column("Download rate", justify="center", style="yellow")
-            wifi_table.add_column("Upload rate", justify="center", style="yellow")
+            wifi_table.add_column("Download", justify="center", style="yellow")
+            wifi_table.add_column("Upload", justify="center", style="yellow")
             wifi_table.add_column("Protocol", justify="center", style="green")
             wifi_table.add_column("Channel", justify="center", style="green")
             wifi_table.add_column("Signal", justify="center", style="green")
@@ -230,7 +235,7 @@ class SwissKnife(cmd2.Cmd):
             wifi_table.add_row(CLOCK_TIME, bssid, downRate, upRate, fq, channel, signal)
             RICH_CONSOLE.print(wifi_table)
 
-    # Show my public IP address
+    # Show my public IP address ---------------------------------------------------------------
     pubip_parser = cmd2.Cmd2ArgumentParser()
     pubip_parser.add_argument('-v', '--verbose', default=False, action='store_true', help='show ip public info from ifconfing.co API')
     @cmd2.with_argparser(pubip_parser)
@@ -297,7 +302,7 @@ class SwissKnife(cmd2.Cmd):
         else:
             print(OPERATING_SYSTEM)
 
-    # Grepping file for common strings. Logic change by args.
+    # Grepping file for common strings. Logic change by args. -------------------------------------------
     file_parser = cmd2.Cmd2ArgumentParser()
     file_parser.add_argument(dest='filepath', type=str, help='File path to the debug file')
     file_parser.add_argument('-t', '--template', type=str, default=("debug"), choices=["debug", "log", "techs", "associations", "timeouts", "reason", "state"])
@@ -321,7 +326,7 @@ class SwissKnife(cmd2.Cmd):
         swiss_func.grep_file(args.filepath, search_patterns)
         
 
-    # Change ip on Windows with command line
+    # Change ip on Windows with command line --------------------------------------------------------------
     changeip_parser = cmd2.Cmd2ArgumentParser()
     changeip_parser.add_argument(dest='interface_name', type=str, help='Interface name like "Ethernet"')
     changeip_parser.add_argument('-dhcp', '--dhcp', default=False, action="store_true", help="Change ip to static/dynamic using netsh")
@@ -341,7 +346,7 @@ class SwissKnife(cmd2.Cmd):
         else:
             print(OPERATING_SYSTEM)
     
-    # WLC Debug parser with DB integration
+    # WLC Debug parser with DB integration ------------------------------------------------------------------
     debug_parser = cmd2.Cmd2ArgumentParser()
     debug_parser.add_argument('-f', '--filename', type=str, default='debug_parser/debugTrace_1.txt', help='File path to debug trace file, default is debug_parser/debugTrace_1.txt')
     debug_parser.add_argument('-id', '--idname', type=str, default=CURRENT_TIME.strftime("%H%M%S"), help='Set the table name, default is the time as %H%M%S')
@@ -350,7 +355,7 @@ class SwissKnife(cmd2.Cmd):
     def do_debug(self, args):
         swiss_func.debug_to_db(args.filename, args.idname)
 
-    # Test command
+    # Test command ------------------------------------------------------------------------------------------
     hello_parser = cmd2.Cmd2ArgumentParser()
     hello_parser.add_argument('-name', type=str, default='Robot', help='A nice hello to test functions')
     hello_parser.add_argument('-surname', type=str, default='Spaceship', help='A nice hello to test functions')
@@ -359,7 +364,7 @@ class SwissKnife(cmd2.Cmd):
     def do_hello(self, args):
         swiss_func.hello_world(args.name, args.surname, args.template)
 
-    # Open a URL in a new tab in Firefox
+    # Open a URL in a new tab in Firefox ----------------------------------------------------------------------
     fire_parser = cmd2.Cmd2ArgumentParser()
     fire_parser.add_argument(dest='url', type=str, default='https://www.cyberciti.biz/faq/howto-run-firefox-from-the-command-line/', help='Opening tabs in Firefox from the commandline')
     #fire_parser.add_argument('-surname', type=str, default='Spaceship', help='A nice fire to test functions')
@@ -384,6 +389,34 @@ class SwissKnife(cmd2.Cmd):
         except Exception as e:
             print(f"An error occurred: {e}")
 
+    # Logging command ------------------------------------------------------------------------------------------
+    syslog_parser = cmd2.Cmd2ArgumentParser()
+    syslog_parser.add_argument('-l', type=str, default=LOG_FILE, help='Logging to file')
+    syslog_parser.add_argument('-s', type=str, default="0.0.0.0", help='Define syslog server host')
+    syslog_parser.add_argument('-p', type=int, default=LOG_PORT, help='Define syslog port')
+    @cmd2.with_argparser(syslog_parser)
+    def do_syslog(self, args):
+        swiss_func.start_syslog(args.l, args.s, args.p)
+    
+    # Fuzzy application ----------------------------------------------------------------------------------------
+    # Fuzzy search like everithing + grep files
+    fuzzy_parser = cmd2.Cmd2ArgumentParser()
+    @cmd2.with_argparser(fuzzy_parser)
+    def do_fuzzy(self, _): 
+        swiss_func.fuzzy_app()
+     
+    exit_parser = cmd2.Cmd2ArgumentParser()
+    @cmd2.with_argparser(exit_parser)
+    def do_exit(self, _): 
+        print("Goodbye :) ")
+        quit()
+    
+    q_parser = cmd2.Cmd2ArgumentParser()
+    @cmd2.with_argparser(q_parser)
+    def do_q(self, _): 
+        print("Goodbye :) ")
+        quit()
+
     # Dividing commands in categories (help command)
     categorize((do_debug), "WLC debug parser")
     categorize((do_pub, do_iplist, do_macvendor, do_tcpRTT, do_wifistat, do_nslookup, do_portlist, do_ipcheck, do_ping, do_changeip), "Network")
@@ -392,8 +425,22 @@ class SwissKnife(cmd2.Cmd):
     categorize((do_fp), "Files")
     categorize((do_fire, do_openapps), "Browser and apps")
     categorize((do_time, do_hello), "Miscellanea")
+    categorize((do_syslog), "Server")
 
 if __name__ == '__main__':
     import sys
-    c = SwissKnife()
-    sys.exit(c.cmdloop())
+    shell_app = SwissKnife()
+
+    # Pre cmd-loop ----------------------------------------------------------------------
+    # Banner ascii
+    swiss_func.show_motd()
+    # IP list using psutils
+    if IP_BANNER == True:
+        swiss_func.list_interfaces()
+    else:
+        pass
+    # Subprocess the shell command like route print or ip route
+    swiss_func.list_routes()
+
+    sys.exit(shell_app.cmdloop())
+    
