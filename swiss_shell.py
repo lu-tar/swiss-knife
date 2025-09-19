@@ -29,7 +29,6 @@ from rich import print
 from tcp_latency import measure_latency
 from ipaddress import ip_network, ip_address, is_multicast, is_private, is_reserved, IPv4Network
 from time import sleep
-from progress.spinner import MoonSpinner
 
 from swiss_conf import *
 
