@@ -2,7 +2,7 @@
 A multipurpose shell for networking/sysadmin tasks written in Python [cmd2](https://cmd2.readthedocs.io/en/latest/) with the goal of minimizing mouse usage and launching programs and scripts quickly from the terminal.
 
 **Disclaimer 🐞**
-This is a personal project to test my programming skills as a network engineer.
+This is a personal project to test my programming skills as a sys/network engineer.
 
 ## Features 🤖
 swiss-knife offers the following features:
@@ -16,13 +16,16 @@ swiss-knife offers the following features:
 - SSH integration with Putty
 - Text file parsing
 
-In the future, the following features are planned for implementation:
-- Automation with Norninr or Netmiko
-- HTTP/FTP/SFTP/TFTP portable server
-- MD5/SHA256 calculator
-- Obsidian and markdown access
-- Port scanner
-- File manager with fuzzy finder
+## To-do list for version 2 of swiss-knife
+A multipurpose shell for networking tasks written in Python cmd2.
+🛠️ Fix 🛠️
+- [x]
+
+🚀 High priority 🚀
+- [x] 
+
+🐌 Low priority 🐌
+- [ ]
 
 ## Getting Started 🚀
 To get started with swiss-knife, follow these steps:
@@ -33,7 +36,6 @@ To get started with swiss-knife, follow these steps:
 ```sh
 git clone https://github.com/lu-tar/swiss-knife.git
 ```
-or download the [ZIP file](https://github.com/lu-tar/swiss-knife/archive/refs/heads/main.zi).
 
 3. Navigate to the project directory, create a virtual environment and activate it. This step is optional but using virtual environments in Python ensures isolation and package version control.
 
